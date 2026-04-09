@@ -1,0 +1,7 @@
+{
+  "done": "・/intent-dive スキル追加（コンテンツ方向性決定用）\n・リポジトリ構成を新構成に変更（line-team: Write / claude-projects: Read-only）\n・CLAUDE.md のパス・タスク管理セクションを新構成に更新\n・ダッシュボード（localhost:8502）のtasks.jsonパスを新リポに修正\n・ICLタスク（t5）をline-teamに追加、TODO3つをメモに記録",
+  "wip": "・ICL診断 立ち上げ進行（t5）\n　→ ジャンル横断1診断のコンセプト詰め中。GLP-1カロリー診断モデルで設計予定",
+  "next": "・ICL記事一覧の収集\n・ジャンル横断診断コンセプトの確定（壁打ち）\n・コンセプト確定後 /craft で設計書作成",
+  "memo": "line-teamリポはWriteOK。claude-projectsは絶対pushしない（事故経験あり）",
+  "updated": "2026-04-09 12:30"
+}
