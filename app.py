@@ -198,8 +198,28 @@ with tab2:
             else:
                 st.caption(f"設計書未作成: {p['brief']}")
 
+    # --- 参考資料セクション ---
     st.divider()
-    st.caption("案件を追加する場合は dashboard/app.py の PROJECTS リストを編集してください")
+    st.markdown("### 参考")
+    st.caption("Renが作成した設計書・依頼書のサンプル（設計・依頼書作成時の参照用）")
+
+    REFS = [
+        {
+            "label": "📋 設計書サンプル（摂取カロリー診断）",
+            "path": "references/参考-摂取カロリー設計.md",
+        },
+        {
+            "label": "📝 デザイン依頼書サンプル（摂取カロリー診断）",
+            "path": "references/参考-デザイン依頼書_摂取カロリー診断.md",
+        },
+    ]
+    for ref in REFS:
+        ref_path = PROJECT_ROOT / ref["path"]
+        if ref_path.exists():
+            with st.expander(ref["label"]):
+                st.markdown(ref_path.read_text(encoding="utf-8"))
+        else:
+            st.caption(f"ファイルが見つかりません: {ref['path']}")
 
 
 # ============================================================
