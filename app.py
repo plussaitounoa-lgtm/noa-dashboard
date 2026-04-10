@@ -84,15 +84,15 @@ def badge(value_str, key):
 # ============================================================
 PROJECTS = [
     {
-        "name": "ICL（眼内コンタクトレンズ）",
+        "name": "ICL（眼内コンタクトレンズ）— 視力タイプ診断",
         "status": "🟡 設計完了 → 制作待ち",
-        "article": "視力の左右差（PV 2,100/月）",
+        "article": "ICLジャンル横断 11記事（PV合計 11,559/月）",
         "phase": "②設計",
         "phases": ["①分析", "②設計", "③制作", "④入稿", "⑤検証"],
         "current_phase": 1,  # 0始まり
-        "brief": "data/output/briefs/診断-不同視チェック.md",
-        "expected_impact": "+15人/月（この記事単体）",
-        "memo": "不同視チェック v2.0。PU文言:「その左右差、問題レベル？」",
+        "brief": "../data/output/briefs/診断-視力タイプ診断.md",
+        "expected_impact": "+83人/月（基準値）/ 最大+147人（改善時）",
+        "memo": "視力タイプ診断。PU:「その目、なんとかなる？」結果カード4枚×4タイプ=16枚構成。制作物合計24枚。",
     },
 ]
 
@@ -209,32 +209,63 @@ with tab3:
     st.subheader("今週の進捗サマリー")
 
     SUMMARY_FILE = PROJECT_ROOT / "summary.json"
+    DAILY_FILE   = PROJECT_ROOT / "daily.json"
 
-    # 保存済みサマリーを読む
-    if SUMMARY_FILE.exists():
-        with open(SUMMARY_FILE, "r", encoding="utf-8") as f:
-            saved = json.load(f)
-    else:
-        saved = {"done": "", "wip": "", "next": "", "memo": "", "updated": ""}
+    daily_tab, weekly_tab = st.tabs(["📅 今日", "📆 今週"])
 
-    with st.form("summary_form"):
-        done = st.text_area("✅ 今週やったこと", value=saved.get("done", ""), height=120)
-        wip  = st.text_area("🔧 進行中のこと",  value=saved.get("wip", ""),  height=80)
-        nxt  = st.text_area("⏭ 来週やること",   value=saved.get("next", ""), height=80)
-        memo = st.text_area("📌 メモ・懸念",     value=saved.get("memo", ""), height=60)
+    # ---- 今日タブ ----
+    with daily_tab:
+        if DAILY_FILE.exists():
+            with open(DAILY_FILE, "r", encoding="utf-8") as f:
+                daily = json.load(f)
+        else:
+            daily = {"done": "", "wip": "", "next": "", "updated": ""}
 
-        if st.form_submit_button("保存"):
-            new_data = {
-                "done": done, "wip": wip,
-                "next": nxt,  "memo": memo,
-                "updated": datetime.now().strftime("%Y-%m-%d %H:%M")
-            }
-            with open(SUMMARY_FILE, "w", encoding="utf-8") as f:
-                json.dump(new_data, f, ensure_ascii=False, indent=2)
-            st.success("保存しました！")
+        with st.form("daily_form"):
+            d_done = st.text_area("✅ 今日やったこと", value=daily.get("done", ""), height=120)
+            d_wip  = st.text_area("🔧 進行中のこと",  value=daily.get("wip", ""),  height=80)
+            d_next = st.text_area("⏭ 明日やること",   value=daily.get("next", ""), height=80)
 
-    if saved.get("updated"):
-        st.caption(f"最終保存: {saved['updated']}")
+            if st.form_submit_button("保存"):
+                new_daily = {
+                    "done": d_done, "wip": d_wip, "next": d_next,
+                    "updated": datetime.now().strftime("%Y-%m-%d %H:%M")
+                }
+                with open(DAILY_FILE, "w", encoding="utf-8") as f:
+                    json.dump(new_daily, f, ensure_ascii=False, indent=2)
+                st.success("保存しました！")
+                st.rerun()
+
+        if daily.get("updated"):
+            st.caption(f"最終保存: {daily['updated']}")
+
+    # ---- 今週タブ ----
+    with weekly_tab:
+        if SUMMARY_FILE.exists():
+            with open(SUMMARY_FILE, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+        else:
+            saved = {"done": "", "wip": "", "next": "", "memo": "", "updated": ""}
+
+        with st.form("summary_form"):
+            done = st.text_area("✅ 今週やったこと", value=saved.get("done", ""), height=120)
+            wip  = st.text_area("🔧 進行中のこと",  value=saved.get("wip", ""),  height=80)
+            nxt  = st.text_area("⏭ 来週やること",   value=saved.get("next", ""), height=80)
+            memo = st.text_area("📌 メモ・懸念",     value=saved.get("memo", ""), height=60)
+
+            if st.form_submit_button("保存"):
+                new_data = {
+                    "done": done, "wip": wip,
+                    "next": nxt,  "memo": memo,
+                    "updated": datetime.now().strftime("%Y-%m-%d %H:%M")
+                }
+                with open(SUMMARY_FILE, "w", encoding="utf-8") as f:
+                    json.dump(new_data, f, ensure_ascii=False, indent=2)
+                st.success("保存しました！")
+                st.rerun()
+
+        if saved.get("updated"):
+            st.caption(f"最終保存: {saved['updated']}")
 
 
 # ============================================================
