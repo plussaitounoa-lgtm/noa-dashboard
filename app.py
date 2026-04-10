@@ -189,12 +189,28 @@ with tab2:
                     else:
                         st.markdown(f"　{phase}")
 
-            # --- 設計書の中身を展開表示 ---
+            # --- 設計書を3タブで表示 ---
             brief_path = PROJECT_ROOT / p["brief"]
             if brief_path.exists():
-                with st.expander("📄 設計書の詳細を見る（リサーチ・ユーザーダイブ・設計内容）"):
-                    content = brief_path.read_text(encoding="utf-8")
-                    st.markdown(content)
+                content = brief_path.read_text(encoding="utf-8")
+
+                # 区切りマーカーでセクションを3分割
+                marker_research = "\n## リサーチ"
+                marker_design   = "\n## 2. ものさしづくり"
+                idx1 = content.find(marker_research)
+                idx2 = content.find(marker_design)
+
+                sec_numbers  = content[:idx1] if idx1 != -1 else content
+                sec_research = content[idx1:idx2] if (idx1 != -1 and idx2 != -1) else ""
+                sec_design   = content[idx2:] if idx2 != -1 else ""
+
+                btab1, btab2, btab3 = st.tabs(["📊 数値・効果", "🔍 リサーチ", "📄 設計書"])
+                with btab1:
+                    st.markdown(sec_numbers)
+                with btab2:
+                    st.markdown(sec_research)
+                with btab3:
+                    st.markdown(sec_design)
             else:
                 st.caption(f"設計書未作成: {p['brief']}")
 
