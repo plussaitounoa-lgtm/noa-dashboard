@@ -91,8 +91,9 @@ PROJECTS = [
         "phases": ["①分析", "②設計", "③制作", "④入稿", "⑤検証"],
         "current_phase": 1,  # 0始まり
         "brief": "briefs/診断-視力改善診断.md",
+        "brief_order": "briefs/デザイン依頼書-視力改善診断.md",
         "expected_impact": "+83人/月（基準値）/ 最大+147人（改善時）",
-        "memo": "視力改善診断。PU:「その目、なんとかなる？」結果カード4枚×4タイプ=16枚構成。制作物合計24枚。",
+        "memo": "視力改善診断。PU:「その目、なんとかなる？」結果カード4枚×3タイプ=12枚構成。制作物合計30枚。",
     },
 ]
 
@@ -204,13 +205,19 @@ with tab2:
                 sec_research = content[idx1:idx2] if (idx1 != -1 and idx2 != -1) else ""
                 sec_design   = content[idx2:] if idx2 != -1 else ""
 
-                btab1, btab2, btab3 = st.tabs(["📊 数値・効果", "🔍 リサーチ", "📄 設計書"])
+                btab1, btab2, btab3, btab4 = st.tabs(["📊 数値・効果", "🔍 リサーチ", "📄 設計書", "📋 依頼書"])
                 with btab1:
                     st.markdown(sec_numbers)
                 with btab2:
                     st.markdown(sec_research)
                 with btab3:
                     st.markdown(sec_design)
+                with btab4:
+                    order_path = PROJECT_ROOT / p.get("brief_order", "")
+                    if p.get("brief_order") and order_path.exists():
+                        st.markdown(order_path.read_text(encoding="utf-8"))
+                    else:
+                        st.caption("依頼書未作成")
             else:
                 st.caption(f"設計書未作成: {p['brief']}")
 
