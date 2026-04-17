@@ -1,10 +1,10 @@
 """
 Noa's LINEマーケ ダッシュボード
 ブラウザで確認用のローカルStreamlitアプリ
+メモ・アイデアタブはパスワード入力後に表示
 """
 
 import streamlit as st
-import subprocess
 import json
 import os
 import requests
@@ -14,17 +14,26 @@ from pathlib import Path
 # ============================================================
 # 設定
 # ============================================================
-# GitHubからタスクを取得するURL（line-teamリポジトリ、Public）
-TASKS_URL = "https://raw.githubusercontent.com/Ren-japan/line-team/main/data/tasks.json"
-PROJECT_ROOT = Path(__file__).parent  # app.pyと同じフォルダ
-KPI_FILE = PROJECT_ROOT / "kpi_data.json"
+TASKS_URL    = "https://raw.githubusercontent.com/Ren-japan/line-team/main/data/tasks.json"
+PROJECT_ROOT = Path(__file__).parent  # dashboard/ フォルダ
+PRIVATE_DIR  = PROJECT_ROOT / "private"
+KPI_FILE     = PROJECT_ROOT / "kpi_data.json"
+MEMO_FILE    = PRIVATE_DIR / "memo.json"
+SECRET_FILE  = PRIVATE_DIR / ".secret"
+
+
+def load_password():
+    """パスワードをprivate/.secretから読む。なければデフォルト"""
+    if SECRET_FILE.exists():
+        return SECRET_FILE.read_text(encoding="utf-8").strip()
+    return "noa"
+
 
 # ============================================================
 # データ取得
 # ============================================================
 
 def load_tasks():
-    """GitHubからtasks.jsonを取得する"""
     try:
         response = requests.get(TASKS_URL, timeout=10)
         response.raise_for_status()
@@ -35,11 +44,9 @@ def load_tasks():
 
 
 def load_kpi():
-    """ローカルのKPIデータを読む。なければデフォルト値を返す"""
     if KPI_FILE.exists():
         with open(KPI_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
-    # デフォルト（初回起動時）
     return {
         "updated": "",
         "genres": [
@@ -52,24 +59,17 @@ def load_kpi():
 
 
 def save_kpi(data):
-    """KPIデータをローカルに保存する"""
     data["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     with open(KPI_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 # ============================================================
-# 指標の基準値（これを下回ったら赤）
+# 指標の基準値
 # ============================================================
-BENCHMARKS = {
-    "pvfr": 0.80,
-    "ctr":  13.0,
-    "fr":   11.0,
-    "fcvr": 3.0,
-}
+BENCHMARKS = {"pvfr": 0.80, "ctr": 13.0, "fr": 11.0, "fcvr": 3.0}
 
 def badge(value_str, key):
-    """値が基準を超えてたら🟢、割ってたら🔴、空なら⬜"""
     if not value_str:
         return "⬜"
     try:
@@ -80,7 +80,7 @@ def badge(value_str, key):
 
 
 # ============================================================
-# 案件データ（ここを手で更新する）
+# 案件データ
 # ============================================================
 PROJECTS = [
     {
@@ -89,7 +89,7 @@ PROJECTS = [
         "article": "ICLジャンル横断 11記事（PV合計 11,559/月）",
         "phase": "②設計",
         "phases": ["①分析", "②設計", "③制作", "④入稿", "⑤検証"],
-        "current_phase": 1,  # 0始まり
+        "current_phase": 1,
         "brief": "briefs/診断-視力改善診断.md",
         "brief_order": "briefs/デザイン依頼書-視力改善診断.md",
         "expected_impact": "+83人/月（基準値）/ 最大+147人（改善時）",
@@ -101,16 +101,39 @@ PROJECTS = [
 # ============================================================
 # ページ設定
 # ============================================================
-st.set_page_config(
-    page_title="Noa's Dashboard",
-    page_icon="📊",
-    layout="wide"
-)
+st.set_page_config(page_title="Noa's Dashboard", page_icon="📊", layout="wide")
 
 st.title("📊 Noa's LINEマーケ ダッシュボード")
 st.caption(f"最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
 
-tab1, tab2, tab3, tab4 = st.tabs(["📋 タスク", "🚀 案件", "📝 進捗サマリー", "📈 ファネル数字"])
+
+# ============================================================
+# サイドバー: パスワード認証
+# ============================================================
+with st.sidebar:
+    st.markdown("### 🔒 プライベートモード")
+    if not st.session_state.get("unlocked"):
+        pw = st.text_input("パスワード", type="password", placeholder="入力してEnter")
+        if pw:
+            if pw == load_password():
+                st.session_state.unlocked = True
+                st.rerun()
+            else:
+                st.error("パスワードが違います")
+    else:
+        st.success("🔓 解除中")
+        if st.button("ロック"):
+            st.session_state.unlocked = False
+            st.rerun()
+
+
+# ============================================================
+# タブ（ロック状態で分岐）
+# ============================================================
+if st.session_state.get("unlocked"):
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📋 タスク", "🚀 案件", "📝 進捗サマリー", "📈 ファネル数字", "🔒 メモ・アイデア"])
+else:
+    tab1, tab2, tab3, tab4 = st.tabs(["📋 タスク", "🚀 案件", "📝 進捗サマリー", "📈 ファネル数字"])
 
 
 # ============================================================
@@ -130,12 +153,10 @@ with tab1:
     last_updated = data.get("last_updated", "不明")
     st.caption(f"tasks.json 最終更新: {last_updated}")
 
-    # Noaのタスクだけ / 全タスク切り替え
     show_all = st.checkbox("全員のタスクを表示", value=False)
     if not show_all:
         tasks = [t for t in tasks if t.get("assignee") == "Noa"]
 
-    # カラムごとに表示
     columns = [
         ("🔲 todo",        "todo"),
         ("🔧 in_progress", "in_progress"),
@@ -150,18 +171,13 @@ with tab1:
             st.markdown(f"**{label}** ({len(col_tasks)})")
             for t in col_tasks:
                 needs_approval = "🔒 " if t.get("needs_approval") else ""
-                assignee = t.get("assignee", "未定")
                 deadline = f" | 期限: {t['deadline']}" if t.get("deadline") else ""
-                with st.expander(f"{needs_approval}{t['title']} ({assignee})"):
+                with st.expander(f"{needs_approval}{t['title']} ({t.get('assignee', '未定')})"):
                     st.write(f"**目的:** {t.get('purpose', '')}")
-                    if t.get("impact"):
-                        st.write(f"**インパクト:** {t.get('impact')}")
-                    if t.get("description"):
-                        st.write(f"**詳細:** {t.get('description')}")
-                    if deadline:
-                        st.write(f"**期限:** {t.get('deadline')}")
-                    if t.get("notes"):
-                        st.write(f"**メモ:** {t.get('notes')}")
+                    if t.get("impact"):      st.write(f"**インパクト:** {t.get('impact')}")
+                    if t.get("description"): st.write(f"**詳細:** {t.get('description')}")
+                    if deadline:             st.write(f"**期限:** {t.get('deadline')}")
+                    if t.get("notes"):       st.write(f"**メモ:** {t.get('notes')}")
 
 
 # ============================================================
@@ -172,7 +188,6 @@ with tab2:
 
     for p in PROJECTS:
         with st.container(border=True):
-            # --- ヘッダー行: 案件名 + フェーズ ---
             c1, c2 = st.columns([3, 1])
             with c1:
                 st.markdown(f"### {p['name']}")
@@ -190,12 +205,10 @@ with tab2:
                     else:
                         st.markdown(f"　{phase}")
 
-            # --- 設計書を3タブで表示 ---
             brief_path = PROJECT_ROOT / p["brief"]
             if brief_path.exists():
                 content = brief_path.read_text(encoding="utf-8")
 
-                # 区切りマーカーでセクションを3分割
                 marker_research = "\n## リサーチ"
                 marker_design   = "\n## 2. ものさしづくり"
                 idx1 = content.find(marker_research)
@@ -221,20 +234,13 @@ with tab2:
             else:
                 st.caption(f"設計書未作成: {p['brief']}")
 
-    # --- 参考資料セクション ---
     st.divider()
     st.markdown("### 参考")
     st.caption("Renが作成した設計書・依頼書のサンプル（設計・依頼書作成時の参照用）")
 
     REFS = [
-        {
-            "label": "📋 設計書サンプル（摂取カロリー診断）",
-            "path": "references/参考-摂取カロリー設計.md",
-        },
-        {
-            "label": "📝 デザイン依頼書サンプル（摂取カロリー診断）",
-            "path": "references/参考-デザイン依頼書_摂取カロリー診断.md",
-        },
+        {"label": "📋 設計書サンプル（摂取カロリー診断）",       "path": "references/参考-摂取カロリー設計.md"},
+        {"label": "📝 デザイン依頼書サンプル（摂取カロリー診断）", "path": "references/参考-デザイン依頼書_摂取カロリー診断.md"},
     ]
     for ref in REFS:
         ref_path = PROJECT_ROOT / ref["path"]
@@ -256,57 +262,30 @@ with tab3:
 
     daily_tab, weekly_tab = st.tabs(["📅 今日", "📆 今週"])
 
-    # ---- 今日タブ ----
     with daily_tab:
-        if DAILY_FILE.exists():
-            with open(DAILY_FILE, "r", encoding="utf-8") as f:
-                daily = json.load(f)
-        else:
-            daily = {"done": "", "wip": "", "next": "", "updated": ""}
-
+        daily = json.load(open(DAILY_FILE, encoding="utf-8")) if DAILY_FILE.exists() else {"done": "", "wip": "", "next": "", "updated": ""}
         with st.form("daily_form"):
             d_done = st.text_area("✅ 今日やったこと", value=daily.get("done", ""), height=120)
             d_wip  = st.text_area("🔧 進行中のこと",  value=daily.get("wip", ""),  height=80)
             d_next = st.text_area("⏭ 明日やること",   value=daily.get("next", ""), height=80)
-
             if st.form_submit_button("保存"):
-                new_daily = {
-                    "done": d_done, "wip": d_wip, "next": d_next,
-                    "updated": datetime.now().strftime("%Y-%m-%d %H:%M")
-                }
-                with open(DAILY_FILE, "w", encoding="utf-8") as f:
-                    json.dump(new_daily, f, ensure_ascii=False, indent=2)
+                json.dump({"done": d_done, "wip": d_wip, "next": d_next, "updated": datetime.now().strftime("%Y-%m-%d %H:%M")}, open(DAILY_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
                 st.success("保存しました！")
                 st.rerun()
-
         if daily.get("updated"):
             st.caption(f"最終保存: {daily['updated']}")
 
-    # ---- 今週タブ ----
     with weekly_tab:
-        if SUMMARY_FILE.exists():
-            with open(SUMMARY_FILE, "r", encoding="utf-8") as f:
-                saved = json.load(f)
-        else:
-            saved = {"done": "", "wip": "", "next": "", "memo": "", "updated": ""}
-
+        saved = json.load(open(SUMMARY_FILE, encoding="utf-8")) if SUMMARY_FILE.exists() else {"done": "", "wip": "", "next": "", "memo": "", "updated": ""}
         with st.form("summary_form"):
             done = st.text_area("✅ 今週やったこと", value=saved.get("done", ""), height=120)
             wip  = st.text_area("🔧 進行中のこと",  value=saved.get("wip", ""),  height=80)
             nxt  = st.text_area("⏭ 来週やること",   value=saved.get("next", ""), height=80)
             memo = st.text_area("📌 メモ・懸念",     value=saved.get("memo", ""), height=60)
-
             if st.form_submit_button("保存"):
-                new_data = {
-                    "done": done, "wip": wip,
-                    "next": nxt,  "memo": memo,
-                    "updated": datetime.now().strftime("%Y-%m-%d %H:%M")
-                }
-                with open(SUMMARY_FILE, "w", encoding="utf-8") as f:
-                    json.dump(new_data, f, ensure_ascii=False, indent=2)
+                json.dump({"done": done, "wip": wip, "next": nxt, "memo": memo, "updated": datetime.now().strftime("%Y-%m-%d %H:%M")}, open(SUMMARY_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
                 st.success("保存しました！")
                 st.rerun()
-
         if saved.get("updated"):
             st.caption(f"最終保存: {saved['updated']}")
 
@@ -317,7 +296,6 @@ with tab3:
 with tab4:
     st.subheader("ファネル数字（KPI）")
 
-    # 基準値の表示
     with st.expander("📏 基準値"):
         st.markdown("""
         | 指標 | 基準値 |
@@ -331,7 +309,6 @@ with tab4:
     kpi_data = load_kpi()
     genres = kpi_data.get("genres", [])
 
-    # 表示
     header = st.columns([2, 1.2, 1.2, 1.2, 1.2, 1.2])
     header[0].markdown("**ジャンル**")
     header[1].markdown("**PVFR(%)**")
@@ -339,7 +316,6 @@ with tab4:
     header[3].markdown("**友達追加率(%)**")
     header[4].markdown("**FCVR(%)**")
     header[5].markdown("**友だち数**")
-
     st.divider()
 
     for g in genres:
@@ -353,7 +329,6 @@ with tab4:
 
     st.divider()
 
-    # 編集フォーム
     with st.expander("✏️ 数字を更新する"):
         with st.form("kpi_form"):
             new_genres = []
@@ -368,7 +343,6 @@ with tab4:
                     "fcvr":    c[3].text_input("FCVR(%)",    value=g.get("fcvr", ""),    key=f"fcvr_{g['name']}"),
                     "friends": c[4].text_input("友だち数",   value=g.get("friends", ""), key=f"fr2_{g['name']}"),
                 })
-
             if st.form_submit_button("保存"):
                 save_kpi({"genres": new_genres})
                 st.success("保存しました！")
@@ -376,3 +350,24 @@ with tab4:
 
     if kpi_data.get("updated"):
         st.caption(f"KPI最終更新: {kpi_data['updated']}")
+
+
+# ============================================================
+# TAB 5: メモ・アイデア（パスワード解除後のみ表示）
+# ============================================================
+if st.session_state.get("unlocked"):
+    with tab5:
+        st.subheader("🔒 メモ・アイデア")
+        memo_data = json.load(open(MEMO_FILE, encoding="utf-8")) if MEMO_FILE.exists() else {"memo": "", "ideas": "", "updated": ""}
+
+        with st.form("memo_form"):
+            memo_text  = st.text_area("📌 メモ",    value=memo_data.get("memo", ""),  height=200)
+            ideas_text = st.text_area("💡 アイデア", value=memo_data.get("ideas", ""), height=200)
+            if st.form_submit_button("保存"):
+                MEMO_FILE.parent.mkdir(exist_ok=True)
+                json.dump({"memo": memo_text, "ideas": ideas_text, "updated": datetime.now().strftime("%Y-%m-%d %H:%M")}, open(MEMO_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                st.success("保存しました！")
+                st.rerun()
+
+        if memo_data.get("updated"):
+            st.caption(f"最終保存: {memo_data['updated']}")
