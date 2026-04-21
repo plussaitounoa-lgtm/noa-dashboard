@@ -126,6 +126,14 @@ with st.sidebar:
             st.session_state.unlocked = False
             st.rerun()
 
+    st.divider()
+
+    DOCS = "https://plussaitounoa-lgtm.github.io/noa-docs/index.html"
+    with st.expander("📄 ドキュメント"):
+        st.markdown(f"[📋 依頼書]({DOCS})")
+        st.markdown(f"[👁️ 設計書]({DOCS})")
+        st.markdown(f"[📖 ガイド]({DOCS})")
+
 
 # ============================================================
 # タブ（ロック状態で分岐）
@@ -257,10 +265,11 @@ with tab2:
 with tab3:
     st.subheader("今週の進捗サマリー")
 
-    SUMMARY_FILE = PROJECT_ROOT / "summary.json"
-    DAILY_FILE   = PROJECT_ROOT / "daily.json"
+    SUMMARY_FILE   = PROJECT_ROOT / "summary.json"
+    DAILY_FILE     = PROJECT_ROOT / "daily.json"
+    WORK_LOG_FILE  = PROJECT_ROOT / "work-log.json"
 
-    daily_tab, weekly_tab = st.tabs(["📅 今日", "📆 今週"])
+    daily_tab, weekly_tab, log_tab = st.tabs(["📅 今日", "📆 今週", "📚 作業ログ"])
 
     with daily_tab:
         daily = json.load(open(DAILY_FILE, encoding="utf-8")) if DAILY_FILE.exists() else {"done": "", "wip": "", "next": "", "updated": ""}
@@ -288,6 +297,36 @@ with tab3:
                 st.rerun()
         if saved.get("updated"):
             st.caption(f"最終保存: {saved['updated']}")
+
+    # ---- 作業ログタブ ----
+    with log_tab:
+        if not WORK_LOG_FILE.exists():
+            st.caption("作業ログがありません（work-log.json）")
+        else:
+            log_data = json.load(open(WORK_LOG_FILE, encoding="utf-8"))
+            entries  = sorted(log_data.get("entries", []), key=lambda x: x["date"], reverse=True)
+            archives = sorted(log_data.get("archives", []), key=lambda x: x["month"], reverse=True)
+
+            # 直近3ヶ月の詳細ログ（月フィルター付き）
+            if entries:
+                months = sorted({e["date"][:7] for e in entries}, reverse=True)
+                selected = st.selectbox("月を選択", months, format_func=lambda m: m.replace("-", "年") + "月")
+                filtered = [e for e in entries if e["date"].startswith(selected)]
+                for entry in filtered:
+                    with st.expander(f"📅 {entry['date']}"):
+                        for item in entry.get("completed", []):
+                            st.markdown(f"- {item}")
+                        if entry.get("notes"):
+                            st.caption(f"メモ: {entry['notes']}")
+
+            # アーカイブ（3ヶ月より古い月次サマリー）
+            if archives:
+                st.divider()
+                st.markdown("#### 過去のアーカイブ")
+                for arc in archives:
+                    label = arc["month"].replace("-", "年") + "月"
+                    with st.expander(f"🗂 {label}（{arc.get('sessions', '-')}セッション）"):
+                        st.write(arc.get("summary", ""))
 
 
 # ============================================================
