@@ -101,9 +101,9 @@ PROJECTS = [
 # ============================================================
 # ページ設定
 # ============================================================
-st.set_page_config(page_title="Noa's Dashboard", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Noa's Dashboard", page_icon="⛄", layout="wide")
 
-st.title("📊 Noa's LINEマーケ ダッシュボード")
+st.title("⛄ Noa's LINEマーケ ダッシュボード")
 st.caption(f"最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
 
 
