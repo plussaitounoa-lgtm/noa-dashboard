@@ -1,6 +1,41 @@
 {
   "entries": [
     {
+      "date": "2026-04-23",
+      "completed": [
+        "ダッシュボード ファビコン・タイトル絵文字を⛄に変更・push",
+        "進捗サマリー更新（4/9→4/23）・push"
+      ],
+      "notes": ""
+    },
+    {
+      "date": "2026-04-22",
+      "completed": [
+        "noa-docs/research-2026-04-21.html 更新・push（4/1〜4/20全体分析・PU別CTRデータ追加）",
+        "data/output/BMIインサイト分析_2026-04-22.md 作成",
+        "roles/cmo/mind.md Type A PU改善フロー修正（仮説形成ステップ追加）",
+        "こいずみ「日本人1番痩せる」記事PU改善分析（pu-analysis-koizumi-diet-japanese-2026-04-22.html作成・push）",
+        "推奨PU案A確定:「痩せない理由、自分の体質から知りたい！」",
+        "line-team/data/tasks.json にt54・t55・t56追加・push（t54・t55はneeds_approval: true）"
+      ],
+      "notes": "t54（BMI PU差し替え）・t55（こいずみPU差し替え）はRen承認待ち。t56はLP側追加率原因調査。"
+    },
+    {
+      "date": "2026-04-21",
+      "completed": [
+        "ロール構成をRenシステムに準じて全面再設計（roles/assistant → roles/ceo、CTO/Researcher/Analyst新規追加）",
+        "/ceo /cio /cmo /cto /researcher /analyst コマンド作成",
+        "quality-gate・mtg-facilitate スキル作成",
+        "CEO flow.md（Phase 0-6）・goals.md 作成",
+        ".claude/rules/ceo.md 自動注入設定追加",
+        "4/1〜4/20データ分析（全体PVFR 0.76%・基準割れ確認）",
+        "最優先課題特定：BMI記事（+74人ポテンシャル）・ワークマン口コミ（+39人）",
+        "data/output/リサーチまとめ_2026-04-21.md 作成（Ren共有用）",
+        "noa-docs/research-2026-04-21.html 作成・push"
+      ],
+      "notes": "shibuya記事別データは未確認。"
+    },
+    {
       "date": "2026-04-20",
       "completed": [
         "TYPE C Card4 文言確定（受けられない術式リスク訴求・依頼書/フロー図/HTML反映・push）",

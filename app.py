@@ -272,11 +272,22 @@ with tab3:
     daily_tab, weekly_tab, log_tab = st.tabs(["📅 今日", "📆 今週", "📚 作業ログ"])
 
     with daily_tab:
+        today_str = datetime.now().strftime("%Y-%m-%d")
         daily = json.load(open(DAILY_FILE, encoding="utf-8")) if DAILY_FILE.exists() else {"done": "", "wip": "", "next": "", "updated": ""}
+
+        # 日付が変わっていたらフィールドをリセット（明日やることだけ引き継ぎ）
+        saved_date = daily.get("updated", "")[:10]
+        is_new_day = bool(saved_date) and saved_date != today_str
+        if is_new_day:
+            st.info(f"🌅 新しい日です（前回保存: {saved_date}）。今日の記録を入力してください。")
+            init_done, init_wip, init_next = "", "", daily.get("next", "")
+        else:
+            init_done, init_wip, init_next = daily.get("done", ""), daily.get("wip", ""), daily.get("next", "")
+
         with st.form("daily_form"):
-            d_done = st.text_area("✅ 今日やったこと", value=daily.get("done", ""), height=120)
-            d_wip  = st.text_area("🔧 進行中のこと",  value=daily.get("wip", ""),  height=80)
-            d_next = st.text_area("⏭ 明日やること",   value=daily.get("next", ""), height=80)
+            d_done = st.text_area("✅ 今日やったこと", value=init_done, height=120)
+            d_wip  = st.text_area("🔧 進行中のこと",  value=init_wip,  height=80)
+            d_next = st.text_area("⏭ 明日やること",   value=init_next, height=80)
             if st.form_submit_button("保存"):
                 json.dump({"done": d_done, "wip": d_wip, "next": d_next, "updated": datetime.now().strftime("%Y-%m-%d %H:%M")}, open(DAILY_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
                 st.success("保存しました！")
