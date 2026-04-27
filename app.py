@@ -134,6 +134,22 @@ with st.sidebar:
         st.markdown(f"[👁️ 設計書]({DOCS})")
         st.markdown(f"[📖 ガイド]({DOCS})")
 
+    st.divider()
+
+    with st.expander("🗺 サイトマップ"):
+        SITES_FILE = PROJECT_ROOT / "sites.json"
+        if SITES_FILE.exists():
+            sites = json.load(open(SITES_FILE, encoding="utf-8"))
+            for s in sites:
+                st.markdown(f"**{s['name']}** — {s['company']}")
+                if s.get("search"):
+                    st.caption(f"記事検索: `{s['search']}`")
+                if s.get("articles"):
+                    st.caption(f"記事: {', '.join(s['articles'])}")
+                st.markdown("")
+        else:
+            st.caption("sites.json が見つかりません")
+
 
 # ============================================================
 # タブ（ロック状態で分岐）
