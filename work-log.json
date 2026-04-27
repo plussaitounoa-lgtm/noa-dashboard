@@ -1,12 +1,29 @@
 {
   "entries": [
     {
+      "date": "2026-04-27",
+      "completed": [
+        "t55（日本人1番痩せる PU差し替え）→ watching移動。2026-04-30(木)数値確認予定",
+        "t57（ダイエットパッチ PU差し替え）→ watching移動。2026-04-30(木)数値確認予定",
+        "サイト別パフォーマンス分析（今週の施策優先度特定）",
+        "小田の記事別パフォーマンス分析（bmi記事ボトルネック確認）",
+        "LINEマーケ研修PDF読み込み（フロー・Winut・タグ理解）",
+        "タスク管理フロー設計見直し（チームボード・個人ダッシュの役割整理）",
+        "work-log.json フォーマット改善（PDCA対応）"
+      ],
+      "challenge": "",
+      "learning": "WINUTはLINEシナリオ管理ツール。追加率0%はURL設定ミスかPUミスマッチを疑う。個人ダッシュのwork-logはPDCA記録として重要だったが記載が抜けがちだった。",
+      "next": "t56（ワークマン口コミ LP改善）着手。4/30にt55・t57数値確認。"
+    },
+    {
       "date": "2026-04-23",
       "completed": [
         "ダッシュボード ファビコン・タイトル絵文字を⛄に変更・push",
         "進捗サマリー更新（4/9→4/23）・push"
       ],
-      "notes": ""
+      "challenge": "",
+      "learning": "",
+      "next": ""
     },
     {
       "date": "2026-04-22",
@@ -18,7 +35,9 @@
         "推奨PU案A確定:「痩せない理由、自分の体質から知りたい！」",
         "line-team/data/tasks.json にt54・t55・t56追加・push（t54・t55はneeds_approval: true）"
       ],
-      "notes": "t54（BMI PU差し替え）・t55（こいずみPU差し替え）はRen承認待ち。t56はLP側追加率原因調査。"
+      "challenge": "",
+      "learning": "t54（BMI PU差し替え）・t55（こいずみPU差し替え）はRen承認待ち。t56はLP側追加率原因調査。",
+      "next": ""
     },
     {
       "date": "2026-04-21",
@@ -33,7 +52,9 @@
         "data/output/リサーチまとめ_2026-04-21.md 作成（Ren共有用）",
         "noa-docs/research-2026-04-21.html 作成・push"
       ],
-      "notes": "shibuya記事別データは未確認。"
+      "challenge": "shibuya記事別データは未確認。",
+      "learning": "",
+      "next": ""
     },
     {
       "date": "2026-04-20",
@@ -44,7 +65,9 @@
         "Notion仕様依頼書 新規作成（デザイン依頼書-視力改善診断-notion.md）",
         "合計枚数 32枚→33枚に更新"
       ],
-      "notes": "TYPE C Card3ブラッシュアップ未着手（次回）。CMOロールで作業。"
+      "challenge": "TYPE C Card3ブラッシュアップ未着手（次回）。",
+      "learning": "",
+      "next": ""
     },
     {
       "date": "2026-04-16",
@@ -55,7 +78,9 @@
         "結果カルーセル TYPE C Card1・2 ブラッシュアップ・push",
         "Q1〜Q5・教育カルーセル Card1/2/6 フロー図v3に同期・push"
       ],
-      "notes": "TYPE C Card4未着手。教育カルーセル新カード内容未確定。"
+      "challenge": "TYPE C Card4未着手。教育カルーセル新カード内容未確定。",
+      "learning": "",
+      "next": ""
     },
     {
       "date": "2026-04-15",
@@ -64,7 +89,9 @@
         "icl-shindan-v3.html 作成・push（v3変更全反映）",
         "副作用データ出典を修正（株式会社ゼロアクセル50名・2025年11月）"
       ],
-      "notes": ""
+      "challenge": "",
+      "learning": "",
+      "next": ""
     },
     {
       "date": "2026-04-14",
@@ -75,7 +102,9 @@
         "眼鏡タイプ結果カード（5枚）ブラッシュアップ完了",
         "PRカルーセル設計確定（懸念先制 Card2 を核とした5枚構成）"
       ],
-      "notes": "一人称を「私」に変更。"
+      "challenge": "",
+      "learning": "一人称を「私」に変更。",
+      "next": ""
     },
     {
       "date": "2026-04-13",
@@ -85,7 +114,9 @@
         "クライアントLP確認（先進会眼科）→ ICL/レーシック並列方針に変更",
         "PR Card01・03・CTA文言を ICL/レーシック両対応に更新・push"
       ],
-      "notes": "フロー図alignmentバグ未解決・保留。"
+      "challenge": "フロー図alignmentバグ未解決・保留。",
+      "learning": "",
+      "next": ""
     },
     {
       "date": "2026-04-10",
@@ -95,7 +126,9 @@
         "ダッシュボード案件タブを3タブ表示に変更（数値・リサーチ・設計書）",
         "診断名「視力タイプ診断」→「視力改善診断」に一括変更・ファイルリネーム・push"
       ],
-      "notes": ""
+      "challenge": "",
+      "learning": "",
+      "next": ""
     },
     {
       "date": "2026-04-09",
@@ -109,7 +142,9 @@
         "CLAUDE.md タスク管理パスを star-team → line-team に更新",
         "line-team・claude-projects リポジトリ構成変更・clone完了"
       ],
-      "notes": ""
+      "challenge": "",
+      "learning": "",
+      "next": ""
     }
   ],
   "archives": []

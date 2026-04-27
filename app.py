@@ -327,8 +327,12 @@ with tab3:
                     with st.expander(f"📅 {entry['date']}"):
                         for item in entry.get("completed", []):
                             st.markdown(f"- {item}")
-                        if entry.get("notes"):
-                            st.caption(f"メモ: {entry['notes']}")
+                        if entry.get("challenge"):
+                            st.markdown(f"**🔴 詰まったこと:** {entry['challenge']}")
+                        if entry.get("learning"):
+                            st.markdown(f"**💡 学び:** {entry['learning']}")
+                        if entry.get("next"):
+                            st.markdown(f"**⏭ 次のアクション:** {entry['next']}")
 
             # アーカイブ（3ヶ月より古い月次サマリー）
             if archives:
