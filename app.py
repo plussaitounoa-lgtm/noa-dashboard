@@ -107,10 +107,23 @@ st.title("⛄ Noa's LINEマーケ ダッシュボード")
 st.caption(f"最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
 
 
+FOCUS_FILE = PROJECT_ROOT / "focus.json"
+
 # ============================================================
 # サイドバー: パスワード認証
 # ============================================================
 with st.sidebar:
+    # 今の焦点
+    if FOCUS_FILE.exists():
+        focus = json.load(open(FOCUS_FILE, encoding="utf-8"))
+        st.markdown(f"### 🎯 {focus.get('title', '今の焦点')}")
+        if focus.get("goal"):
+            st.info(focus["goal"])
+        for a in focus.get("actions", []):
+            st.markdown(f"- {a}")
+        st.caption(f"更新: {focus.get('updated', '')}")
+        st.divider()
+
     st.markdown("### 🔒 プライベートモード")
     if not st.session_state.get("unlocked"):
         pw = st.text_input("パスワード", type="password", placeholder="入力してEnter")
