@@ -409,19 +409,51 @@ with tab4:
 # ============================================================
 # TAB 5: メモ・アイデア（パスワード解除後のみ表示）
 # ============================================================
+WANT_FILE = PROJECT_ROOT / "want-todo.json"
+
 if st.session_state.get("unlocked"):
     with tab5:
         st.subheader("🔒 メモ・アイデア")
-        memo_data = json.load(open(MEMO_FILE, encoding="utf-8")) if MEMO_FILE.exists() else {"memo": "", "ideas": "", "updated": ""}
 
-        with st.form("memo_form"):
-            memo_text  = st.text_area("📌 メモ",    value=memo_data.get("memo", ""),  height=200)
-            ideas_text = st.text_area("💡 アイデア", value=memo_data.get("ideas", ""), height=200)
-            if st.form_submit_button("保存"):
-                MEMO_FILE.parent.mkdir(exist_ok=True)
-                json.dump({"memo": memo_text, "ideas": ideas_text, "updated": datetime.now().strftime("%Y-%m-%d %H:%M")}, open(MEMO_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-                st.success("保存しました！")
-                st.rerun()
+        memo_tab, want_tab = st.tabs(["📌 メモ・アイデア", "🗒 やりたいこと"])
 
-        if memo_data.get("updated"):
-            st.caption(f"最終保存: {memo_data['updated']}")
+        with memo_tab:
+            memo_data = json.load(open(MEMO_FILE, encoding="utf-8")) if MEMO_FILE.exists() else {"memo": "", "ideas": "", "updated": ""}
+            with st.form("memo_form"):
+                memo_text  = st.text_area("📌 メモ",    value=memo_data.get("memo", ""),  height=200)
+                ideas_text = st.text_area("💡 アイデア", value=memo_data.get("ideas", ""), height=200)
+                if st.form_submit_button("保存"):
+                    MEMO_FILE.parent.mkdir(exist_ok=True)
+                    json.dump({"memo": memo_text, "ideas": ideas_text, "updated": datetime.now().strftime("%Y-%m-%d %H:%M")}, open(MEMO_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                    st.success("保存しました！")
+                    st.rerun()
+            if memo_data.get("updated"):
+                st.caption(f"最終保存: {memo_data['updated']}")
+
+        with want_tab:
+            want_data = json.load(open(WANT_FILE, encoding="utf-8")) if WANT_FILE.exists() else {"items": []}
+            items = want_data.get("items", [])
+
+            # 追加フォーム
+            with st.form("want_add_form"):
+                new_item = st.text_input("やりたいこと追加")
+                if st.form_submit_button("追加"):
+                    if new_item.strip():
+                        items.append({"text": new_item.strip(), "done": False, "added": datetime.now().strftime("%Y-%m-%d")})
+                        WANT_FILE.parent.mkdir(exist_ok=True)
+                        json.dump({"items": items}, open(WANT_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                        st.success("追加しました！")
+                        st.rerun()
+
+            # 一覧表示
+            if not items:
+                st.caption("まだ何もありません")
+            else:
+                for i, item in enumerate(items):
+                    col1, col2 = st.columns([6, 1])
+                    label = f"~~{item['text']}~~" if item.get("done") else item["text"]
+                    col1.markdown(f"{'✅' if item.get('done') else '⬜'} {label}  \n<small>{item.get('added','')}</small>", unsafe_allow_html=True)
+                    if col2.button("完了" if not item.get("done") else "戻す", key=f"want_{i}"):
+                        items[i]["done"] = not items[i].get("done")
+                        json.dump({"items": items}, open(WANT_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                        st.rerun()
