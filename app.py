@@ -116,11 +116,9 @@ with st.sidebar:
     # 今の焦点
     if FOCUS_FILE.exists():
         focus = json.load(open(FOCUS_FILE, encoding="utf-8"))
-        st.markdown(f"### 🎯 {focus.get('title', '今の焦点')}")
-        if focus.get("goal"):
-            st.info(focus["goal"])
-        for a in focus.get("actions", []):
-            st.markdown(f"- {a}")
+        st.markdown(f"### 🎯 {focus.get('title', '今の行動指針')}")
+        for item in focus.get("items", []):
+            st.markdown(f"- {item}")
         st.caption(f"更新: {focus.get('updated', '')}")
         st.divider()
 
