@@ -272,7 +272,7 @@ with tab1:
         p_tasks = [t for t in p_data.get("tasks", []) if not t.get("done")]
         if p_tasks:
             st.divider()
-            st.markdown("**📌 個人メモ（チーム非公開）**")
+            st.markdown("**📌 個人メモ**")
             for t in p_tasks:
                 deadline_str = f" — 期限: {t['deadline']}" if t.get("deadline") else ""
                 col1, col2 = st.columns([6, 1])
