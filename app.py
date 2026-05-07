@@ -265,6 +265,25 @@ with tab1:
                     if deadline:             st.write(f"**期限:** {t.get('deadline')}")
                     if t.get("notes"):       st.write(f"**メモ:** {t.get('notes')}")
 
+    # 個人タスク（チームボード非公開）
+    PERSONAL_FILE = PROJECT_ROOT / "personal_tasks.json"
+    if PERSONAL_FILE.exists():
+        p_data = json.load(open(PERSONAL_FILE, encoding="utf-8"))
+        p_tasks = [t for t in p_data.get("tasks", []) if not t.get("done")]
+        if p_tasks:
+            st.divider()
+            st.markdown("**📌 個人メモ（チーム非公開）**")
+            for t in p_tasks:
+                deadline_str = f" — 期限: {t['deadline']}" if t.get("deadline") else ""
+                col1, col2 = st.columns([6, 1])
+                col1.markdown(f"・{t['title']}{deadline_str}")
+                if col2.button("完了", key=f"p_{t['id']}"):
+                    for item in p_data["tasks"]:
+                        if item["id"] == t["id"]:
+                            item["done"] = True
+                    json.dump(p_data, open(PERSONAL_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                    st.rerun()
+
 
 # ============================================================
 # TAB 2: 案件ページ
