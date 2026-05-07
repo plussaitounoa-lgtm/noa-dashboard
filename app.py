@@ -107,12 +107,63 @@ st.title("⛄ Noa's LINEマーケ ダッシュボード")
 st.caption(f"最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
 
 
-FOCUS_FILE = PROJECT_ROOT / "focus.json"
+FOCUS_FILE       = PROJECT_ROOT / "focus.json"
+MONTHLY_GOAL_FILE = PROJECT_ROOT / "monthly_goal.json"
+
+
+def load_monthly_goal():
+    if MONTHLY_GOAL_FILE.exists():
+        with open(MONTHLY_GOAL_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    return {"goal": 800, "current": 0, "days_elapsed": 0, "month": "", "updated": ""}
+
+
+def save_monthly_goal(data):
+    with open(MONTHLY_GOAL_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
 
 # ============================================================
 # サイドバー: パスワード認証
 # ============================================================
 with st.sidebar:
+    # 月次目標進捗
+    mg = load_monthly_goal()
+    goal       = mg.get("goal", 800)
+    current    = mg.get("current", 0)
+    days_elapsed = mg.get("days_elapsed", 0)
+    days_in_month = 31
+
+    daily_pace   = current / days_elapsed if days_elapsed > 0 else 0
+    projection   = int(daily_pace * days_in_month)
+    pct          = min(current / goal, 1.0) if goal > 0 else 0
+    on_track     = projection >= goal
+
+    st.markdown(f"### 📊 5月目標: {goal}人")
+    st.progress(pct, text=f"{current} / {goal}人")
+    col_a, col_b = st.columns(2)
+    col_a.metric("日均", f"{daily_pace:.1f}人")
+    col_b.metric("着地予測", f"{projection}人", delta="✅ 達成圏" if on_track else f"▲{goal - projection}人不足", delta_color="normal" if on_track else "inverse")
+    st.caption(f"({days_elapsed}日経過 / {mg.get('updated','')}")
+
+    with st.expander("✏️ 数字を更新"):
+        with st.form("goal_form"):
+            new_current  = st.number_input("今月の友達追加数", value=current, step=1)
+            new_elapsed  = st.number_input("経過日数", value=days_elapsed, step=1)
+            new_goal     = st.number_input("月次目標", value=goal, step=10)
+            if st.form_submit_button("更新"):
+                save_monthly_goal({
+                    "goal": new_goal,
+                    "current": new_current,
+                    "days_elapsed": new_elapsed,
+                    "month": mg.get("month", ""),
+                    "updated": datetime.now().strftime("%Y-%m-%d"),
+                })
+                st.success("更新しました")
+                st.rerun()
+
+    st.divider()
+
     # 今の焦点
     if FOCUS_FILE.exists():
         focus = json.load(open(FOCUS_FILE, encoding="utf-8"))
