@@ -288,23 +288,6 @@ with st.sidebar:
         st.caption(f"更新: {focus.get('updated', '')}")
         st.divider()
 
-    with st.expander("⚙️ 設定"):
-        if not st.session_state.get("unlocked"):
-            pw = st.text_input("", type="password", placeholder="パスワードを入力", label_visibility="collapsed")
-            if pw:
-                if pw == load_password():
-                    st.session_state.unlocked = True
-                    st.rerun()
-                else:
-                    st.error("違います")
-        else:
-            st.caption("🔓 解除中")
-            if st.button("ロック"):
-                st.session_state.unlocked = False
-                st.rerun()
-
-    st.divider()
-
     DOCS = "https://plussaitounoa-lgtm.github.io/noa-docs/index.html"
     with st.expander("📄 ドキュメント"):
         st.markdown(f"[📋 依頼書]({DOCS})")
@@ -326,6 +309,23 @@ with st.sidebar:
                 st.markdown("")
         else:
             st.caption("sites.json が見つかりません")
+
+    st.divider()
+
+    with st.expander("⚙️ 設定"):
+        if not st.session_state.get("unlocked"):
+            pw = st.text_input("", type="password", placeholder="パスワードを入力", label_visibility="collapsed")
+            if pw:
+                if pw == load_password():
+                    st.session_state.unlocked = True
+                    st.rerun()
+                else:
+                    st.error("違います")
+        else:
+            st.caption("🔓 解除中")
+            if st.button("ロック"):
+                st.session_state.unlocked = False
+                st.rerun()
 
 
 # ============================================================
