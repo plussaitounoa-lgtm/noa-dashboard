@@ -1,0 +1,116 @@
+{
+  "updated": "2026-05-22 17:26",
+  "period": "5/1~5/17",
+  "genres": [
+    {
+      "name": "医療ダイエット(合算)",
+      "pvfr": 1.03,
+      "impfr": 1.69,
+      "ctr": 9.97,
+      "fr": 17.0,
+      "fcvr": 1.4,
+      "friends": 357.0,
+      "cv": 5.0,
+      "revenue": null
+    },
+    {
+      "name": "医療ダイエット(PLUS)",
+      "pvfr": 0.83,
+      "impfr": 1.36,
+      "ctr": 9.5,
+      "fr": 14.36,
+      "fcvr": 0.0,
+      "friends": 162.0,
+      "cv": 0.0,
+      "revenue": null
+    },
+    {
+      "name": "医療ダイエット(AVA)",
+      "pvfr": 1.26,
+      "impfr": 2.08,
+      "ctr": 10.48,
+      "fr": 19.85,
+      "fcvr": 0.0,
+      "friends": 187.0,
+      "cv": 0.0,
+      "revenue": null
+    },
+    {
+      "name": "医療ダイエット(SUTEKi)",
+      "pvfr": 1.68,
+      "impfr": 3.94,
+      "ctr": 14.78,
+      "fr": 26.67,
+      "fcvr": 0.0,
+      "friends": 8.0,
+      "cv": 0.0,
+      "revenue": null
+    },
+    {
+      "name": "FAGA",
+      "pvfr": 0.48,
+      "impfr": 1.49,
+      "ctr": 7.46,
+      "fr": 20.0,
+      "fcvr": 0.0,
+      "friends": 1.0,
+      "cv": 0.0,
+      "revenue": null
+    },
+    {
+      "name": "ピル",
+      "pvfr": 0.65,
+      "impfr": 1.03,
+      "ctr": 8.47,
+      "fr": 12.15,
+      "fcvr": 9.09,
+      "friends": 22.0,
+      "cv": 2.0,
+      "revenue": null
+    },
+    {
+      "name": "包茎",
+      "pvfr": 0.73,
+      "impfr": 1.05,
+      "ctr": 9.02,
+      "fr": 11.65,
+      "fcvr": 0.0,
+      "friends": 46.0,
+      "cv": 0.0,
+      "revenue": null
+    },
+    {
+      "name": "ED",
+      "pvfr": 0.63,
+      "impfr": 1.08,
+      "ctr": 11.31,
+      "fr": 9.55,
+      "fcvr": 29.41,
+      "friends": 17.0,
+      "cv": 5.0,
+      "revenue": null
+    },
+    {
+      "name": "転職",
+      "pvfr": 0.28,
+      "impfr": 0.5,
+      "ctr": 10.47,
+      "fr": 4.76,
+      "fcvr": 0.0,
+      "friends": 3.0,
+      "cv": 0.0,
+      "revenue": null
+    },
+    {
+      "name": "リカバリーウェア",
+      "pvfr": 0.31,
+      "impfr": 0.53,
+      "ctr": 12.43,
+      "fr": 4.29,
+      "fcvr": 5.56,
+      "friends": 18.0,
+      "cv": 1.0,
+      "revenue": null
+    }
+  ]
+}

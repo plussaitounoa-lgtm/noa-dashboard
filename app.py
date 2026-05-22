@@ -7,6 +7,9 @@ Noa's LINEマーケ ダッシュボード
 import streamlit as st
 import json
 import os
+import csv
+import io
+import re
 import requests
 from datetime import datetime
 from pathlib import Path
@@ -77,6 +80,89 @@ def badge(value_str, key):
         return "🟢" if v >= BENCHMARKS[key] else "🔴"
     except:
         return "⬜"
+
+
+# ============================================================
+# スプレッドシートからKPI取得（ライブフェッチ・1時間キャッシュ）
+# ============================================================
+_KPI_SHEET_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1kjWKJ5RsVeWO80Zva1wTK5zFp8Tgx6Eney9yWu7rD0U"
+    "/export?format=csv&gid=823780364"
+)
+
+_GENRE_ROWS = [
+    ("医療ダイエット(合算)",   11),
+    ("医療ダイエット(PLUS)",   13),
+    ("医療ダイエット(AVA)",    15),
+    ("医療ダイエット(SUTEKi)", 17),
+    ("FAGA",                   19),
+    ("ピル",                   21),
+    ("包茎",                   23),
+    ("ED",                     25),
+    ("転職",                   27),
+    ("リカバリーウェア",       31),
+]
+
+_BENCHMARKS_KPI = {"pvfr": 0.80, "impfr": 1.40, "ctr": 13.0, "fr": 11.0, "fcvr": 3.0}
+
+
+def _clean_pct(val):
+    if not val or val.strip() in ("計測中", "-", ""):
+        return None
+    try:
+        return float(val.replace("%", "").replace(",", "").strip())
+    except ValueError:
+        return None
+
+
+def _clean_num(val):
+    if not val or val.strip() in ("計測中", "-", ""):
+        return None
+    try:
+        return float(re.sub(r"[¥,\s]", "", val))
+    except ValueError:
+        return None
+
+
+@st.cache_data(ttl=3600)
+def fetch_kpi_spreadsheet():
+    """スプレッドシートCSVを取得してジャンル別KPIを返す。失敗時はNone"""
+    try:
+        resp = requests.get(_KPI_SHEET_URL, timeout=15)
+        resp.raise_for_status()
+        rows = list(csv.reader(io.StringIO(resp.text)))
+        period = rows[4][1].strip() if len(rows) > 4 and len(rows[4]) > 1 else ""
+        genres = []
+        for name, row_idx in _GENRE_ROWS:
+            if row_idx >= len(rows):
+                continue
+            row = rows[row_idx]
+            def get(col, r=row):
+                return r[col] if len(r) > col else ""
+            genres.append({
+                "name":    name,
+                "pvfr":    _clean_pct(get(12)),
+                "impfr":   _clean_pct(get(13)),
+                "ctr":     _clean_pct(get(6)),
+                "fr":      _clean_pct(get(7)),
+                "fcvr":    _clean_pct(get(14)),
+                "friends": _clean_num(get(8)),
+                "cv":      _clean_num(get(15)),
+                "revenue": _clean_num(get(16)),
+            })
+        return {"period": period, "genres": genres}
+    except Exception:
+        return None
+
+
+def _badge_kpi(val, key):
+    """数値とキーを受け取り (アイコン, 表示文字列) を返す"""
+    bm = _BENCHMARKS_KPI.get(key)
+    if val is None:
+        return "⬜", "-"
+    icon = "🟢" if val >= bm else "🔴"
+    return icon, f"{val:.2f}%"
 
 
 # ============================================================
@@ -449,58 +535,78 @@ with tab4:
 
     with st.expander("📏 基準値"):
         st.markdown("""
-        | 指標 | 基準値 |
-        |------|-------|
-        | PVFR | 0.80〜1.00% |
-        | PU CTR | 13%以上 |
-        | 友だち追加率 | 11%以上 |
-        | FCVR | 3%以上 |
+        | 指標 | 基準値 | 説明 |
+        |------|-------|------|
+        | PVFR | 0.80〜1.00% | PV→友達追加率（F/LP） |
+        | IMPFR | 1.40〜1.50% | PU表示→友達追加率（F/PUimp） |
+        | PU CTR | 13%以上 | PUクリック率 |
+        | 友だち追加率 | 11%以上 | PUクリック→友達追加 |
+        | FCVR | 3%以上 | 友達→CV率 |
         """)
 
-    kpi_data = load_kpi()
-    genres = kpi_data.get("genres", [])
+    # 更新ボタン
+    if st.button("🔄 スプシから更新"):
+        st.cache_data.clear()
+        st.rerun()
 
-    header = st.columns([2, 1.2, 1.2, 1.2, 1.2, 1.2])
-    header[0].markdown("**ジャンル**")
-    header[1].markdown("**PVFR(%)**")
-    header[2].markdown("**PU CTR(%)**")
-    header[3].markdown("**友達追加率(%)**")
-    header[4].markdown("**FCVR(%)**")
-    header[5].markdown("**友だち数**")
+    # スプシからライブ取得、失敗時はkpi_data.jsonにフォールバック
+    sheet_data = fetch_kpi_spreadsheet()
+
+    if sheet_data:
+        genres_kpi = sheet_data["genres"]
+        period_label = sheet_data["period"]
+        st.caption(f"期間: {period_label}　｜　スプレッドシートから取得（1時間キャッシュ）")
+    else:
+        # フォールバック: 旧kpi_data.json形式を変換
+        kpi_data = load_kpi()
+        genres_kpi = []
+        for g in kpi_data.get("genres", []):
+            def _to_f(v):
+                try: return float(v)
+                except: return None
+            genres_kpi.append({
+                "name":    g["name"],
+                "pvfr":    _to_f(g.get("pvfr")),
+                "impfr":   None,
+                "ctr":     _to_f(g.get("ctr")),
+                "fr":      _to_f(g.get("fr")),
+                "fcvr":    _to_f(g.get("fcvr")),
+                "friends": _to_f(g.get("friends")),
+                "cv":      None,
+                "revenue": None,
+            })
+        st.caption("⚠️ スプレッドシート取得失敗 → kpi_data.json を表示")
+
+    # ---- テーブルヘッダー ----
+    cols_ratio = [2.2, 1, 1, 1, 1, 1, 0.9, 0.7, 1.4]
+    col_labels = ["ジャンル", "PVFR", "IMPFR", "PU CTR", "友追率", "FCVR", "友達数", "CV", "売上"]
+    hdr = st.columns(cols_ratio)
+    for h, label in zip(hdr, col_labels):
+        h.markdown(f"**{label}**")
     st.divider()
 
-    for g in genres:
-        row = st.columns([2, 1.2, 1.2, 1.2, 1.2, 1.2])
+    # ---- データ行 ----
+    for g in genres_kpi:
+        pvfr_ic,  pvfr_v  = _badge_kpi(g["pvfr"],  "pvfr")
+        impfr_ic, impfr_v = _badge_kpi(g["impfr"], "impfr")
+        ctr_ic,   ctr_v   = _badge_kpi(g["ctr"],   "ctr")
+        fr_ic,    fr_v    = _badge_kpi(g["fr"],     "fr")
+        fcvr_ic,  fcvr_v  = _badge_kpi(g["fcvr"],  "fcvr")
+
+        friends_str = str(int(g["friends"])) if g["friends"] is not None else "-"
+        cv_str      = str(int(g["cv"]))      if g["cv"]      is not None else "-"
+        rev_str     = f"¥{int(g['revenue']):,}" if g["revenue"] is not None else "-"
+
+        row = st.columns(cols_ratio)
         row[0].write(g["name"])
-        row[1].write(f"{badge(g['pvfr'], 'pvfr')} {g['pvfr'] or '-'}%")
-        row[2].write(f"{badge(g['ctr'],  'ctr' )} {g['ctr']  or '-'}%")
-        row[3].write(f"{badge(g['fr'],   'fr'  )} {g['fr']   or '-'}%")
-        row[4].write(f"{badge(g['fcvr'], 'fcvr')} {g['fcvr'] or '-'}%")
-        row[5].write(g["friends"] or "-")
-
-    st.divider()
-
-    with st.expander("✏️ 数字を更新する"):
-        with st.form("kpi_form"):
-            new_genres = []
-            for g in genres:
-                st.markdown(f"**{g['name']}**")
-                c = st.columns(5)
-                new_genres.append({
-                    "name":    g["name"],
-                    "pvfr":    c[0].text_input("PVFR(%)",    value=g.get("pvfr", ""),    key=f"pvfr_{g['name']}"),
-                    "ctr":     c[1].text_input("CTR(%)",     value=g.get("ctr", ""),     key=f"ctr_{g['name']}"),
-                    "fr":      c[2].text_input("友追率(%)",  value=g.get("fr", ""),      key=f"fr_{g['name']}"),
-                    "fcvr":    c[3].text_input("FCVR(%)",    value=g.get("fcvr", ""),    key=f"fcvr_{g['name']}"),
-                    "friends": c[4].text_input("友だち数",   value=g.get("friends", ""), key=f"fr2_{g['name']}"),
-                })
-            if st.form_submit_button("保存"):
-                save_kpi({"genres": new_genres})
-                st.success("保存しました！")
-                st.rerun()
-
-    if kpi_data.get("updated"):
-        st.caption(f"KPI最終更新: {kpi_data['updated']}")
+        row[1].write(f"{pvfr_ic} {pvfr_v}")
+        row[2].write(f"{impfr_ic} {impfr_v}")
+        row[3].write(f"{ctr_ic} {ctr_v}")
+        row[4].write(f"{fr_ic} {fr_v}")
+        row[5].write(f"{fcvr_ic} {fcvr_v}")
+        row[6].write(friends_str)
+        row[7].write(cv_str)
+        row[8].write(rev_str)
 
 
 # ============================================================
