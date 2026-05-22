@@ -288,20 +288,20 @@ with st.sidebar:
         st.caption(f"更新: {focus.get('updated', '')}")
         st.divider()
 
-    st.markdown("### 🔒 プライベートモード")
-    if not st.session_state.get("unlocked"):
-        pw = st.text_input("パスワード", type="password", placeholder="入力してEnter")
-        if pw:
-            if pw == load_password():
-                st.session_state.unlocked = True
+    with st.expander("⚙️ 設定"):
+        if not st.session_state.get("unlocked"):
+            pw = st.text_input("", type="password", placeholder="パスワードを入力", label_visibility="collapsed")
+            if pw:
+                if pw == load_password():
+                    st.session_state.unlocked = True
+                    st.rerun()
+                else:
+                    st.error("違います")
+        else:
+            st.caption("🔓 解除中")
+            if st.button("ロック"):
+                st.session_state.unlocked = False
                 st.rerun()
-            else:
-                st.error("パスワードが違います")
-    else:
-        st.success("🔓 解除中")
-        if st.button("ロック"):
-            st.session_state.unlocked = False
-            st.rerun()
 
     st.divider()
 
