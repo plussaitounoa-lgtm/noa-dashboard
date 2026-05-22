@@ -133,6 +133,8 @@ def fetch_kpi_spreadsheet():
         resp.raise_for_status()
         rows = list(csv.reader(io.StringIO(resp.text)))
         period = rows[4][1].strip() if len(rows) > 4 and len(rows[4]) > 1 else ""
+
+        # KPI数値（行ベース取得）
         genres = []
         for name, row_idx in _GENRE_ROWS:
             if row_idx >= len(rows):
@@ -151,7 +153,34 @@ def fetch_kpi_spreadsheet():
                 "cv":      _clean_num(get(15)),
                 "revenue": _clean_num(get(16)),
             })
-        return {"period": period, "genres": genres}
+
+        # 評価・コメント（Row 45がジャンル列ヘッダー、46が評価、47がコメント）
+        # ジャンルは col 2〜11 の順で _GENRE_ROWS と対応
+        eval_icons = {"◎": "🟢", "○": "🟡", "△": "🟠", "×": "🔴"}
+        evaluations = []
+        if len(rows) > 47:
+            eval_row    = rows[46]
+            comment_row = rows[47]
+            for i, (name, _) in enumerate(_GENRE_ROWS):
+                col = i + 2  # col[2]〜col[11]
+                raw_eval = eval_row[col].strip() if len(eval_row) > col else ""
+                comment  = comment_row[col].strip() if len(comment_row) > col else ""
+                evaluations.append({
+                    "name":    name,
+                    "eval":    raw_eval,
+                    "icon":    eval_icons.get(raw_eval, "⬜"),
+                    "comment": comment,
+                })
+
+        # 次月アクション（Row 51 col[1]）
+        next_actions = rows[51][1].strip() if len(rows) > 51 and len(rows[51]) > 1 else ""
+
+        return {
+            "period":       period,
+            "genres":       genres,
+            "evaluations":  evaluations,
+            "next_actions": next_actions,
+        }
     except Exception:
         return None
 
@@ -607,6 +636,24 @@ with tab4:
         row[6].write(friends_str)
         row[7].write(cv_str)
         row[8].write(rev_str)
+
+    # ---- 現状・評価セクション ----
+    evaluations = sheet_data.get("evaluations", []) if sheet_data else []
+    next_actions = sheet_data.get("next_actions", "") if sheet_data else ""
+
+    if evaluations:
+        st.divider()
+        st.markdown("#### 📊 ジャンル別現状")
+
+        for ev in evaluations:
+            label = f"{ev['icon']} **{ev['name']}**　{ev['eval']}"
+            with st.expander(label, expanded=False):
+                st.write(ev["comment"] or "—")
+
+    if next_actions:
+        st.divider()
+        st.markdown("#### 📋 次週〜次月アクション")
+        st.markdown(next_actions)
 
 
 # ============================================================
