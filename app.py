@@ -131,7 +131,7 @@ def fetch_kpi_spreadsheet():
     try:
         resp = requests.get(_KPI_SHEET_URL, timeout=15)
         resp.raise_for_status()
-        rows = list(csv.reader(io.StringIO(resp.text)))
+        rows = list(csv.reader(io.StringIO(resp.content.decode('utf-8'))))
         period = rows[4][1].strip() if len(rows) > 4 and len(rows[4]) > 1 else ""
 
         # KPI数値（行ベース取得）
