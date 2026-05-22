@@ -1,6 +1,166 @@
 {
   "entries": [
     {
+      "date": "2026-05-22",
+      "completed": [
+        "隠れ肥満タイプ診断HTML（shindan-kakure-himantype-2026-05-21.html）正式版に完全書き直し・push（正しいタイプ: かくれ内臓脂肪/かくれ体脂肪/代謝スロー）",
+        "PRカルーセル依頼書（SLILIN F）作成: data/output/briefs/デザイン依頼書-PRカルーセル-SLILINF.md（4枚構成・レギュレーション全制約反映）",
+        "ダッシュボード ファネル数字タブ: スプシ連動に更新（10ジャンル・8指標・ライブフェッチ）",
+        "ダッシュボード: ジャンル別現状・次月アクションセクション追加",
+        "ダッシュボード UI: プライベートモードを⚙️設定expander内に隠す・サイドバー最下部に移動",
+        "文字化け修正（resp.content.decode('utf-8')に変更）"
+      ],
+      "challenge": "直提携案件（SLILIN F）でレギュレーション確認を設計より後にやってしまいコピー全書き直しが発生。機能性表示食品は届出表示の範囲でしかコピーが書けない。",
+      "learning": "直提携案件はレギュレーション確認が設計より前。機能性表示食品は届出全文を先に読んでからカード文言を書く。PRカルーセルの仮テスト戦略は直提携では使えない。",
+      "next": "PRカルーセルデザイン発注（Card4の価格確認後）。診断デザイン完成次第、隠れ肥満タイプ診断とPRカルーセルを同時実装。"
+    },
+    {
+      "date": "2026-05-21",
+      "completed": [
+        "Notion Morning Meeting Log作成: 5/12・5/13・5/14・5/21（4件）",
+        "MS Team Playbook（LINE）追記: 戦略メモ・バナー運用ルール・数値確認ルール・研修ノート（ノウハウ記事レクチャー12項目）",
+        "My Database（Tool Notes）追記: タグ設定担当ルール・ジャンル単価メモ",
+        "noa-dashboardリポジトリをプライベートに変更",
+        "Streamlit「Oh no.」エラー対応: OAuthリボーク→再認証→キャッシュクリアで復旧",
+        "新卒フォロー Notionページにコンテンツ追加（1か月振り返り所感まとめ）"
+      ],
+      "challenge": "GitHubリポジトリをプライベートにしたらStreamlitが動かなくなった。StreamlitはGitHubからコードを直接読む仕組みのため、プライベート化でアクセス権が切れる。キャッシュクリアを繰り返して最終的に復旧。",
+      "learning": "GitHubリポジトリプライベート化→Streamlit再認証が必要。Morning Meeting LogはNoaがチャットに直接テキストを貼る形が定着（ファイル化不要）。MTG記録後はMy Database追記候補を必ず提案する。",
+      "next": "t90ワークマン口コミバナー設置（最優先+35人/月）。t89バナータグ設定確認。t91記事改修サイクル運用。"
+    },
+    {
+      "date": "2026-05-20",
+      "completed": [
+        "CIO分析: 5月好調主犯特定（glp1_seo_ava が144人/13日・全体43%）",
+        "tag1413「本気で痩せたい」: 離脱防止PUで39人/13日（最大単一タグ貢献）確認",
+        "tag1498「ダイエットパッチ」変遷判明: 4/17まで通常PU→4/18〜4/30空白→5/1から離脱防止PU",
+        "分析メモ: data/output/briefs/分析-5月好調主犯特定_2026-05-20.md作成"
+      ],
+      "challenge": "バナーのCTRはデータシステムに記録されていない（全バナー共通）。pu_imp・pu_clickが常にゼロ。バナー効果判断は友だち追加数のみで行う必要がある。",
+      "learning": "バナーで取れるのは友だち追加数のみ。通常ダッシュボード≠離脱防止計測CSV（別データソース）。「データにない」と言う前に両方を確認すること。",
+      "next": "t90ワークマン口コミバナー設置。t89バナータグ設定確認。記事改修サイクル運用（t91）。"
+    },
+    {
+      "date": "2026-05-15",
+      "completed": [
+        "t81: 包茎バナー挿入（茅ヶ崎）完了",
+        "t80: EDバナー設置（ginza）完了",
+        "t83: ほくろ除去ダウンタイム記事改修（mega-clinic）HTML出力完了",
+        "t65: こいずみダイエット未設置記事バナー挿入"
+      ],
+      "challenge": "Chromeヘッドレス --print-to-pdf はこの環境でクラッシュ（-1073741819）する。EdgeもNG。PDFが必要な場合はPlaywright or HTMLをGitHub Pagesに上げてweb共有が現実的。",
+      "learning": "「PDFで出せなくていい」という代替提案に乗れ。HTMLをnoa-docsに上げる方法が最速。タスク追加コマンドは--ballが必須（値: ren/ceo/worker/external/paused/watching）。",
+      "next": "t90ワークマン口コミバナー設置（最優先）。t82産後シミ記事改修。t89バナータグ確認。"
+    },
+    {
+      "date": "2026-05-14",
+      "completed": [
+        "patch_banner_date_col.py作成: ws.clear()不使用・G列ヘッダーと列幅のみ設定する安全パッチ・全10タブ適用済み",
+        "スプシ更新スクリプト修正: G列だけ変える設計に統一（ヘッダー外データ保持）",
+        "メガタブ マイピック仕様化: ▼ジャンル名形式セクションヘッダー（濃いグレー・白文字）に変更"
+      ],
+      "challenge": "ws.clear()で手動入力値が全消えした。バージョン履歴で復元。G列のみ変更指示なのにE/F列も変更してしまった。言われた列だけ触るルールを徹底する必要がある。",
+      "learning": "スプシ更新スクリプトはws.clear()を使うな。ピンポイント更新（特定列だけupdate）か、patch_*.pyで対象列のみ触う方式にする。実行前に何をするか伝えてから動く。",
+      "next": "t81包茎バナー挿入（茅ヶ崎）。t80EDバナー設置（ginza）。"
+    },
+    {
+      "date": "2026-05-13",
+      "completed": [
+        "Notion Morning Meeting Log: 5/13分作成",
+        "MS Team Playbook追記: Renからのレクチャー内容",
+        "未設置記事検知スプシ: 全タブバナー設置日（G列）ヘッダー追加作業継続",
+        "add_phimosis_sheet.py・add_pill_sheet.py・add_pill_mf_sheet.py追加"
+      ],
+      "challenge": "スクリプトを編集だけして「完了」と報告してしまった（実行せず）。Noaに「何してたの？」と指摘。実行まで行うか「実行しますか？」と確認するルール確立。",
+      "learning": "スプシ更新スクリプトは実行して初めて完了。実行前に全列保持が必須。gspreadはヘッダー範囲外の列を返さない（旧K列のバナー設置日メモが消失した経験から）。",
+      "next": "t74包茎5記事バナー設置。t73ピルMF設置済み確認→GYN/MFバナー設置。"
+    },
+    {
+      "date": "2026-05-12",
+      "completed": [
+        "t76: 週次報告5/12作成完了（279人/786人ペース/▲14人不足）",
+        "未設置記事検知スプシ: 包茎（茅ヶ崎）・ED（ginza）タブ追加",
+        "Notion Morning Meeting Log: 5/12分作成",
+        "バナー未設置検知インパクト分析: 全ジャンル展開で+64人/月見込み確認",
+        "jmro.co.jp（マイピック）= リカバリーウェアのみPU設置可能と判明"
+      ],
+      "challenge": "SEO 279人にバナー分（113人）が既に含まれているのにさらに足して二重カウント（397人）してしまった。Noaに指摘。SEOのみ・279人が正しい月間目標ベース。",
+      "learning": "MTG後はMy Database追記候補を必ず提案する（提案型ワークフロー）。テーブル化時は詳細を削りすぎない。NotionスクリプトでUnicodeエラーが出てもHTTPリクエストは通っている（重複ページが発生した経験から）。",
+      "next": "t74包茎バナー設置。t73ピルGYN/MFバナー設置。t65こいずみBMI・間食バナー挿入。"
+    },
+    {
+      "date": "2026-05-11",
+      "completed": [
+        "3ジャンル分析（ピル/包茎/ED）: 月次友だち数・未設置記事・追加率・優先度まとめ",
+        "add_honbe_sheet.py作成: ほんべ（ICL）36記事・全件未設置・優先度カラー済み",
+        "未設置記事検知スプシ: ほんべタブ追加（6タブ体制）"
+      ],
+      "challenge": "レポートの視点が「指標」から入ってしまい事業軸との紐付けが弱かった。友だち→売上→CV数の事業ゴール軸から先に入るべき。",
+      "learning": "レポートは事業軸から入る。結論・主犯・今日やることを1行目に。アクションはNoaに確認を取ってから進める（自律発火しない）。「サチコ」が正しい略称（「サイチコ」は誤り）。",
+      "next": "t73ピル: MFビューティ・GYN CSVを用意→add_pill_sheet.py作成。t74包茎: スプシ追加→バナー設置。"
+    },
+    {
+      "date": "2026-05-08",
+      "completed": [
+        "add_koizumi_sheet.py新規作成（こいずみ7記事・CVグレーアウト）",
+        "add_aita_sheet.py・add_oda_sheet.py・add_shibuya_sheet.py・add_mega_sheet.py: 記事種別列（D列）追加",
+        "noa-docs/mifusetchi-spushi.html 新規作成・push（未設置検知ガイド＋バナー設置計画）",
+        "noa-docs/index.html: ツール・運用セクション追加・push",
+        "knowledge/sites.md: 小田メール修正・あいた/ほんべ分割"
+      ],
+      "challenge": "こいずみシートにタブ名の重複が発生（「こいずみ（ダイエット）」と「こいずみ」）。重複タブは削除してから改名するルール確立。",
+      "learning": "デザイナー依頼はNoaが直接Notionに作成（Rinon経由ではない）。案件名命名規則: 「ジャンル：依頼内容」形式。防風通聖散は漢方なのでダイエット薬診断バナー対象外。記事種別（CV/ノウハウ）はスクリプトで自動入力しない（手入力列として空白保持）。",
+      "next": "t65バナー挿入（こいずみBMI・間食記事）。t73ピル未設置記事スプシ作成。t74包茎バナー設置。"
+    },
+    {
+      "date": "2026-05-07",
+      "completed": [
+        "Notion Morning Meeting Log DB構築完了: DB ID 3528c3ae-ca4e-81d8-93d2-e69585b1bd84",
+        "Notion API直叩き方式確立（Bash経由・MCP不要）",
+        "Morning Meeting Log: 5/7分作成",
+        "未設置記事検知スプシ: 渋谷（ダイエット）・小田（脱毛）タブ追加",
+        "add_shibuya_sheet.py・add_oda_sheet.py 作成"
+      ],
+      "challenge": "サービスアカウントDriveフル→新規スプシ作成不可。Noaに作ってもらって共有してもらう方式が正解。",
+      "learning": "Morning Meeting Log DBの設計確定（1日=1ページ・4セクション構成・カレンダービューはUI手動追加）。提案型ワークフロー: Claude候補出し→Noa判断でMy Databaseに追記。",
+      "next": "t65バナー挿入（こいずみBMI・間食・medicine）。小田スプシ記事名手入力。t55旧PU並走確認。"
+    },
+    {
+      "date": "2026-05-01",
+      "completed": [
+        "t57友達追加画面改善設計書作成・push（noa-docs/friend-add-screen-diet-patch-2026-05-01.html）",
+        "施策前後比較分析（施策前7日 vs 施策後6日）: noa-docs/pu-result-diet-2026-05-01.html作成・push",
+        "noa-docs/pu-result-diet-2026-04-30.html IMPFR/PVFR追記・確定・push",
+        "line-team/data/tasks.json: t57メモ更新・t5 watching移行・push"
+      ],
+      "challenge": "「新しく記載」と明示されていたのに既存ファイルに追記してしまった。「別で」「新しく」は必ず別ファイル作成。",
+      "learning": "施策結果分析の正しい比較は「施策前N日 vs 施策後N日」のbefore/after。施策詳細はNoaが一次情報（Renではなく）。別PUを削除対象と誤認しないこと（複数PUが同記事に設定されているケースがある）。",
+      "next": "t57 Renへの方向性確認。t55継続観察（7日以上）。t60設計書push→Renへ共有。"
+    },
+    {
+      "date": "2026-04-30",
+      "completed": [
+        "t60設計書: noa-docs/friend-add-screen-ed-viagra-2026-04-30.html 作成・push（EDバイアグラ友達追加画面改善）",
+        "t61設計書: noa-docs/pu-analysis-phimosis-2026-04-30.html 作成・push（包茎PU CTR改善）",
+        "noa-docs/index.html: 両ページ追加・push",
+        "line-team/data/tasks.json: t55当たり判定・t57追加率要確認メモ追記・push",
+        "Notion Morning Meeting Log DB構築開始（DB ID・4セクション構成確定）"
+      ],
+      "challenge": "CTR基準超えのPUに対してPU改善を提案してしまった（EDバイアグラ）。Noaに「CTRは基準超えてるから友達追加画面だけ直す」と修正。機能してる指標は触らない。",
+      "learning": "同PU異記事比較が友達追加画面問題の決定的証拠（バイアグラ1.1〜4.4% vs DMMED 8〜13%）。Notion APIは先頭挿入不可（appendのみ）。申し送りは議論の文脈も残す（結論だけでは翌日話が噛み合わない）。",
+      "next": "Renへ報告セット（t55当たり確定・t57問題・t60・t61設計書共有）。t57友達追加画面改善設計。"
+    },
+    {
+      "date": "2026-04-28",
+      "completed": [
+        "Notion My Database: 6ページリネーム・説明文追加（Marketing Basics / Team Playbook / Campaign Log / Tool Notes / How Ren Thinks / Idea Box）",
+        "knowledge/anti-patterns.md: CTR高×FR低→友達追加画面（③）パターン追記"
+      ],
+      "challenge": "求められていないアウトプット（報告文）を「分析して」の指示に対して出してしまった。タスクの範囲を確認してから動く。",
+      "learning": "追加率データがある=LINEアカウント・URLは正しい。週次報告「なぜ」欄は「現状→方向性」の形式（背景説明ではない）。数値はCIOの確定値をそのまま使う（自分で換算・丸めをすると間違える）。",
+      "next": "4/30（木）t55・t57数値確認。t60 EDバイアグラ友達追加画面改善CMO設計。t61包茎PU CTR改善。"
+    },
+    {
       "date": "2026-04-27",
       "completed": [
         "t55（日本人1番痩せる PU差し替え）→ watching移動。2026-04-30(木)数値確認予定",
