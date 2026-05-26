@@ -85,11 +85,20 @@ def badge(value_str, key):
 # ============================================================
 # スプレッドシートからKPI取得（ライブフェッチ・1時間キャッシュ）
 # ============================================================
-_KPI_SHEET_URL = (
-    "https://docs.google.com/spreadsheets/d/"
-    "1kjWKJ5RsVeWO80Zva1wTK5zFp8Tgx6Eney9yWu7rD0U"
-    "/export?format=csv&gid=736850"
-)
+_KPI_SPREADSHEET_ID = "1kjWKJ5RsVeWO80Zva1wTK5zFp8Tgx6Eney9yWu7rD0U"
+
+
+@st.cache_data(ttl=3600)
+def _get_latest_report_gid():
+    """スプシのHTMLからシートタブ一覧を取得し、最新の週次/月次報告タブのgidとタブ名を返す"""
+    url = f"https://docs.google.com/spreadsheets/d/{_KPI_SPREADSHEET_ID}/htmlview"
+    resp = requests.get(url, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
+    resp.raise_for_status()
+    matches = re.findall(r'items\.push\(\{name: "([^"]+)", pageUrl: "[^"]+gid=(\d+)', resp.text)
+    for name, gid in matches:
+        if "週次報告" in name or "月次報告" in name:
+            return gid, name.replace(r"\/", "/")
+    return None, None
 
 _GENRE_ROWS = [
     ("医療ダイエット(合算)",   11),
@@ -129,10 +138,17 @@ def _clean_num(val):
 def fetch_kpi_spreadsheet():
     """スプレッドシートCSVを取得してジャンル別KPIを返す。失敗時はNone"""
     try:
-        resp = requests.get(_KPI_SHEET_URL, timeout=15)
+        gid, sheet_name = _get_latest_report_gid()
+        if not gid:
+            return None
+        url = (
+            f"https://docs.google.com/spreadsheets/d/{_KPI_SPREADSHEET_ID}"
+            f"/export?format=csv&gid={gid}"
+        )
+        resp = requests.get(url, timeout=15)
         resp.raise_for_status()
         rows = list(csv.reader(io.StringIO(resp.content.decode('utf-8'))))
-        period = rows[4][1].strip() if len(rows) > 4 and len(rows[4]) > 1 else ""
+        period = f"{sheet_name}（{rows[4][1].strip()}）" if len(rows) > 4 and len(rows[4]) > 1 else sheet_name
 
         # KPI数値（行ベース取得）
         genres = []
