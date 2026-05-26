@@ -288,11 +288,28 @@ with st.sidebar:
         st.caption(f"更新: {focus.get('updated', '')}")
         st.divider()
 
-    DOCS = "https://plussaitounoa-lgtm.github.io/noa-docs/index.html"
-    with st.expander("📄 ドキュメント"):
-        st.markdown(f"[📋 依頼書]({DOCS})")
-        st.markdown(f"[👁️ 設計書]({DOCS})")
-        st.markdown(f"[📖 ガイド]({DOCS})")
+    DOCS_BASE = "https://plussaitounoa-lgtm.github.io/noa-docs/"
+    DOCS_INDEX = DOCS_BASE + "index.html"
+
+    with st.expander("📋 依頼書"):
+        st.markdown(f"[ICL診断]({DOCS_BASE}icl-irai-v2.html)")
+        st.markdown(f"[PRカルーセル（SLILINF）]({DOCS_BASE}brief-pr-carousel-slilinf-2026-05-22.html)")
+        st.markdown(f"[隠れ肥満 教育カルーセル]({DOCS_BASE}brief-edu-carousel-kakurehiman-2026-05-22.html)")
+        st.caption(f"[→ 一覧]({DOCS_INDEX})")
+
+    with st.expander("📐 設計書"):
+        st.markdown(f"[ICL診断 v3]({DOCS_BASE}icl-shindan-v3.html)")
+        st.markdown(f"[ICL フロー v3]({DOCS_BASE}icl-flow-v3.html)")
+        st.markdown(f"[隠れ肥満タイプ診断 v3]({DOCS_BASE}shindan-kakure-himantype-v3-2026-05-25.html)")
+        st.markdown(f"[ダイエットパッチ 友達追加画面]({DOCS_BASE}friend-add-screen-diet-patch-2026-05-01.html)")
+        st.markdown(f"[包茎 PU分析]({DOCS_BASE}pu-analysis-phimosis-2026-04-30.html)")
+        st.caption(f"[→ 一覧]({DOCS_INDEX})")
+
+    with st.expander("📖 ガイド"):
+        st.markdown(f"[ノウハウ記事改修ガイド]({DOCS_BASE}rank-knowhow.html)")
+        st.markdown(f"[未設置記事検知スプシ]({DOCS_BASE}mifusetchi-spushi.html)")
+        st.markdown(f"[未設置インパクト分析]({DOCS_BASE}mifusetchi-impact.html)")
+        st.caption(f"[→ 一覧]({DOCS_INDEX})")
 
     st.divider()
 
