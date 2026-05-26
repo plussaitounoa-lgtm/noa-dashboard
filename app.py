@@ -88,7 +88,7 @@ def badge(value_str, key):
 _KPI_SHEET_URL = (
     "https://docs.google.com/spreadsheets/d/"
     "1kjWKJ5RsVeWO80Zva1wTK5zFp8Tgx6Eney9yWu7rD0U"
-    "/export?format=csv&gid=823780364"
+    "/export?format=csv&gid=736850"
 )
 
 _GENRE_ROWS = [
