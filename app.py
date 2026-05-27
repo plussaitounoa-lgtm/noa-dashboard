@@ -686,7 +686,7 @@ with tab5:
     role  = ls.get("role", {})
 
     # ---- 売上KPI ----
-    st.markdown("### 📊 売上KPI（③間接CV = LINEチーム）")
+    st.markdown("### 📊 売上KPI")
     annual_goal = kpi.get("annual_goal", 0)
     st.caption(f"年間目標: ¥{annual_goal:,}　|　データ更新: {ls.get('updated','')}")
 
