@@ -347,10 +347,12 @@ with st.sidebar:
 # ============================================================
 # タブ（ロック状態で分岐）
 # ============================================================
+LINE_STRATEGY_FILE = PROJECT_ROOT / "line-strategy.json"
+
 if st.session_state.get("unlocked"):
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📋 タスク", "🚀 案件", "📝 進捗サマリー", "📈 ファネル数字", "🔒 メモ・アイデア"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["📋 タスク", "🚀 案件", "📝 進捗サマリー", "📈 ファネル数字", "🎯 LINE戦略", "🔒 メモ・アイデア"])
 else:
-    tab1, tab2, tab3, tab4 = st.tabs(["📋 タスク", "🚀 案件", "📝 進捗サマリー", "📈 ファネル数字"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📋 タスク", "🚀 案件", "📝 進捗サマリー", "📈 ファネル数字", "🎯 LINE戦略"])
 
 
 # ============================================================
@@ -673,12 +675,77 @@ with tab4:
 
 
 # ============================================================
-# TAB 5: メモ・アイデア（パスワード解除後のみ表示）
+# TAB 5: LINE戦略（パスワード不要）
+# ============================================================
+with tab5:
+    st.subheader("🎯 LINE戦略")
+
+    ls = json.load(open(LINE_STRATEGY_FILE, encoding="utf-8")) if LINE_STRATEGY_FILE.exists() else {}
+    kpi   = ls.get("kpi", {})
+    strat = ls.get("strategy", {})
+    role  = ls.get("role", {})
+
+    # ---- 売上KPI ----
+    st.markdown("### 📊 売上KPI（③間接CV = LINEチーム）")
+    annual_goal = kpi.get("annual_goal", 0)
+    st.caption(f"年間目標: ¥{annual_goal:,}　|　データ更新: {ls.get('updated','')}")
+
+    months_data = kpi.get("months", [])
+    if months_data:
+        # 現在月を特定
+        now_ym = datetime.now().strftime("%Y-%m")
+        cols_kpi = st.columns(len(months_data))
+        for col, m in zip(cols_kpi, months_data):
+            goal   = m.get("goal", 0)
+            actual = m.get("actual")
+            is_now = m["month"] == now_ym
+            label  = f"**{m['label']}**" if is_now else m["label"]
+            col.markdown(label)
+            col.caption(f"目標 ¥{goal//10000}万")
+            if actual is not None:
+                rate = actual / goal * 100 if goal else 0
+                icon = "🟢" if rate >= 100 else ("🟡" if rate >= 70 else "🔴")
+                col.metric("実績", f"¥{actual//10000}万", f"{icon} {rate:.0f}%", delta_color="off")
+            else:
+                col.caption("—")
+
+    st.divider()
+
+    # ---- 戦略方針 ----
+    st.markdown("### 🔭 戦略方針")
+    if strat:
+        st.markdown(f"**ビジョン:** {strat.get('vision','')}")
+        st.markdown(f"**転換方針:** {strat.get('shift','')}")
+        st.markdown(f"**PV戦略:** {strat.get('pv_strategy','')}")
+
+    st.divider()
+
+    # ---- Noaの役割 ----
+    st.markdown(f"### 👤 {role.get('title','Noaの期待役割')}")
+    for item in role.get("items", []):
+        st.markdown(f"- {item}")
+
+    st.divider()
+
+    # ---- 施策メモ（編集可） ----
+    st.markdown("### 📝 施策メモ")
+    with st.form("strategy_memo_form"):
+        memo_val = st.text_area("自由メモ（施策アイデア・課題など）", value=ls.get("memo", ""), height=200)
+        if st.form_submit_button("保存"):
+            ls["memo"] = memo_val
+            ls["updated"] = datetime.now().strftime("%Y-%m-%d")
+            json.dump(ls, open(LINE_STRATEGY_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+            st.success("保存しました")
+            st.rerun()
+
+
+# ============================================================
+# TAB 6: メモ・アイデア（パスワード解除後のみ表示）
 # ============================================================
 WANT_FILE = PROJECT_ROOT / "want-todo.json"
 
 if st.session_state.get("unlocked"):
-    with tab5:
+    with tab6:
         st.subheader("🔒 メモ・アイデア")
 
         memo_tab, want_tab = st.tabs(["📌 メモ・アイデア", "🗒 やりたいこと"])

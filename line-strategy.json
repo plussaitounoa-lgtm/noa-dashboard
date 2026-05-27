@@ -1,0 +1,36 @@
+{
+  "kpi": {
+    "label": "③間接CV（LINEチーム）",
+    "annual_goal": 30600000,
+    "months": [
+      {"month": "2026-05", "label": "5月", "goal": 1000000, "actual": 687345},
+      {"month": "2026-06", "label": "6月", "goal": 1000000, "actual": null},
+      {"month": "2026-07", "label": "7月", "goal": 1200000, "actual": null},
+      {"month": "2026-08", "label": "8月", "goal": 1500000, "actual": null},
+      {"month": "2026-09", "label": "9月", "goal": 1700000, "actual": null},
+      {"month": "2026-10", "label": "10月", "goal": 2000000, "actual": null},
+      {"month": "2026-11", "label": "11月", "goal": 2500000, "actual": null},
+      {"month": "2026-12", "label": "12月", "goal": 3200000, "actual": null},
+      {"month": "2027-01", "label": "1月", "goal": 3500000, "actual": null},
+      {"month": "2027-02", "label": "2月", "goal": 4000000, "actual": null},
+      {"month": "2027-03", "label": "3月", "goal": 5000000, "actual": null}
+    ]
+  },
+  "strategy": {
+    "vision": "10月に月200万達成。年間3,060万のLINEチームKPIを全うする",
+    "shift": "CV改善だけでは限界。PV拡大型戦略（周辺KW記事追加・記事回収・新規投入）との2本柱へ転換",
+    "pv_strategy": "ダイエット・痩せる薬系の周辺KWを積極拡張。バナー設置＋ファネル改善で既存PVを刈り取りながら、新規PVで母数を増やす",
+    "updated": "2026-05-27"
+  },
+  "role": {
+    "title": "Noaの期待役割（2026-05-27 Renより）",
+    "items": [
+      "「不足○件を埋めるには何を打つべきか？」を自律的に考える戦略担当へ",
+      "理想数値設定 → 現状との差分把握 → 改善施策立案 → シミュレーション、の「ミニ戦略」を回す",
+      "インパクトある未対応箇所を洗い出し、整備を継続",
+      "リアルタイム共有しやすい分析基盤づくり"
+    ]
+  },
+  "memo": "",
+  "updated": "2026-05-27"
+}
