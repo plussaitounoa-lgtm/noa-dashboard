@@ -6,6 +6,20 @@
       "deadline": "2026-05-08",
       "done": true,
       "added": "2026-05-07"
+    },
+    {
+      "id": "p2",
+      "title": "未設置検知スプシの各タブにパスワード設定",
+      "deadline": null,
+      "done": false,
+      "added": "2026-05-27"
+    },
+    {
+      "id": "p3",
+      "title": "バナー設置後の変化分析（設置前後の友達追加数比較）",
+      "deadline": null,
+      "done": false,
+      "added": "2026-05-27"
     }
   ]
 }
