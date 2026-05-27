@@ -400,22 +400,37 @@ with tab1:
 
     # 個人タスク（チームボード非公開）
     PERSONAL_FILE = PROJECT_ROOT / "personal_tasks.json"
-    if PERSONAL_FILE.exists():
-        p_data = json.load(open(PERSONAL_FILE, encoding="utf-8"))
-        p_tasks = [t for t in p_data.get("tasks", []) if not t.get("done")]
-        if p_tasks:
-            st.divider()
-            st.markdown("**📌 個人メモ**")
-            for t in p_tasks:
-                deadline_str = f" — 期限: {t['deadline']}" if t.get("deadline") else ""
-                col1, col2 = st.columns([6, 1])
-                col1.markdown(f"・{t['title']}{deadline_str}")
-                if col2.button("完了", key=f"p_{t['id']}"):
-                    for item in p_data["tasks"]:
-                        if item["id"] == t["id"]:
-                            item["done"] = True
-                    json.dump(p_data, open(PERSONAL_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-                    st.rerun()
+    p_data = json.load(open(PERSONAL_FILE, encoding="utf-8")) if PERSONAL_FILE.exists() else {"tasks": []}
+    p_tasks = [t for t in p_data.get("tasks", []) if not t.get("done")]
+
+    st.divider()
+    st.markdown("**📌 個人メモ**")
+
+    # 追加フォーム
+    with st.form("personal_add_form", clear_on_submit=True):
+        col_input, col_btn = st.columns([5, 1])
+        new_title = col_input.text_input("", placeholder="メモを追加…", label_visibility="collapsed")
+        submitted = col_btn.form_submit_button("追加")
+        if submitted and new_title.strip():
+            existing_ids = [int(t["id"].replace("p","")) for t in p_data["tasks"] if t["id"].startswith("p") and t["id"][1:].isdigit()]
+            new_id = f"p{max(existing_ids) + 1 if existing_ids else 1}"
+            p_data["tasks"].append({"id": new_id, "title": new_title.strip(), "deadline": None, "done": False, "added": datetime.now().strftime("%Y-%m-%d")})
+            json.dump(p_data, open(PERSONAL_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+            st.rerun()
+
+    # 一覧
+    if not p_tasks:
+        st.caption("メモなし")
+    for t in p_tasks:
+        deadline_str = f" — 期限: {t['deadline']}" if t.get("deadline") else ""
+        col1, col2 = st.columns([6, 1])
+        col1.markdown(f"・{t['title']}{deadline_str}")
+        if col2.button("完了", key=f"p_{t['id']}"):
+            for item in p_data["tasks"]:
+                if item["id"] == t["id"]:
+                    item["done"] = True
+            json.dump(p_data, open(PERSONAL_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+            st.rerun()
 
 
 # ============================================================
