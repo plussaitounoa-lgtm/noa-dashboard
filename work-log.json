@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "date": "2026-05-21",
+      "completed": [
+        "mega-clinic.com クマ取りダウンタイム記事 PHASE4 HTML出力完了（H2①〜⑥・脂肪溶解法H3追加・H2⑥CV誘導導線確定）",
+        "リード文「3つ→4つ」修正",
+        "H2⑥まとめのCV誘導文言をオブラート調整"
+      ],
+      "challenge": "コンテキスト圧縮でNoaが共有したHTMLが消え再送依頼が発生。H3末尾に他トピック参照を書いてしまい指摘された。",
+      "learning": "H3は独立完結。「後述の〜」はNG。「維持」ブロックも全文出力必須。まとめH2のCV誘導は直接CTAでなく文脈で自然につなぐ。",
+      "next": "脂肪溶解法CV記事URLが決まり次第、H2①末尾に内部リンク差し込み。実装完了後にprogress/rank-kuma-downtime.mdを削除。"
+    },
+    {
       "date": "2026-05-22",
       "completed": [
         "隠れ肥満タイプ診断HTML（shindan-kakure-himantype-2026-05-21.html）正式版に完全書き直し・push",
