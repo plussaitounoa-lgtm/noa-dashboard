@@ -1,6 +1,18 @@
 {
   "entries": [
     {
+      "date": "2026-06-04",
+      "completed": [
+        "5月月次振り返りDocs: IMPFRラベル修正（PU PVFR→IMPFR）・push",
+        "5月月次振り返りDocs: ジャンル別デイペース表追加（上旬5/1-5/13 vs 下旬5/14-5/31）・push",
+        "Notion Morning Meeting Log作成: 2026-06-03 指標整理・ポップ改修方針MTG",
+        "My Database 5ページ追記（How Ren Thinks / Team Playbook / Marketing Basics / Idea Box / Tool Notes）"
+      ],
+      "challenge": "PVFR/IMPFR定義の混乱。PU imp=LP PVかどうかで迷走。バナーのインプが取れないことも整理に時間がかかった。",
+      "learning": "PVFR=友達/記事PV（基準0.80-1.00%）/ IMPFR=友達/PU imp（基準1.40-1.50%）の定義確定。取ったてリストCSVで全友達（PU+バナー）を日別ジャンル集計できる。CTR単独判断しない（表示率倍でCTRは半減）。",
+      "next": "PU設置台帳 DT_タブ展開（こいずみ・小田・30）: Noaが未設置検知スプシ確認後に着手。"
+    },
+    {
       "date": "2026-05-21",
       "completed": [
         "mega-clinic.com クマ取りダウンタイム記事 PHASE4 HTML出力完了（H2①〜⑥・脂肪溶解法H3追加・H2⑥CV誘導導線確定）",
