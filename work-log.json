@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "date": "2026-06-30",
+      "completed": [
+        "Morning Meeting Log（2026-06-30）Notion記録完了",
+        "My Database 6件追記（How Ren Thinks 3件・Team Playbook 1件・Marketing Basics 1件・Idea Box 1件）",
+        "t126 in_progress更新・push（カレーナ記事修正）"
+      ],
+      "challenge": "manage.pyがcp932エンコードエラーで失敗 → $env:PYTHONUTF8=1 をPowerShellで設定して解決",
+      "learning": "Notion MCPツールがToolSearchで取得できるようになった。以前はPowerShell REST API直接呼び出しが必要だったが、今回はMCPツールで直接操作可能。",
+      "next": "カレーナ記事修正7本（期限7/1・最優先）→ コスメPRカルーセル作成 → 週次報告すり合わせ（16時前後）"
+    },
+    {
       "date": "2026-06-03",
       "completed": [
         "PU改修方針Docs作成・push（5/14前後期間分割・PVFR追加・MTG方針反映）",
