@@ -1,6 +1,18 @@
 {
   "entries": [
     {
+      "date": "2026-07-07",
+      "completed": [
+        "朝会ログ（7/7）Notion記録＋My Database（How Ren Thinks/Team Playbook）2件追記",
+        "Notion文字化け大規模修復：6/25分（元ログ＋My Database4ページ）・6/09分（My Database3ページ）を全復元",
+        "副次的に発生していた改行バグ（7/7・7/6分の\"n\"化け）も修正",
+        "knowledge/anti-patterns.mdに「Notion操作の落とし穴」セクションを新設し技術教訓を昇格"
+      ],
+      "challenge": "Notionページへの複数行日本語書き込みで改行がリテラル文字\"n\"に化ける事故を自分で2回発生させた。さらにreplace_contentでページ全体を書き換えた際、埋め込みdatabaseビュー3つを消してしまい復元が必要になった。",
+      "learning": "Notionにテキストを書く時は\"\\n\"エスケープ表記でなく実際の改行を使うこと。ページ全体をreplace_contentする前は元のfetch結果の非テキスト要素（database埋め込み等）を漏れなくnew_strに含めること。文字化け復旧はローカルDownloadsの元テキスト→Notion内の一次ソースページの順で確認すれば大抵見つかる（\"?\"や\"�\"に置き換わった場合は情報が完全に失われ復元不可能）。",
+      "next": ""
+    },
+    {
       "date": "2026-07-06",
       "completed": [
         "朝会ログ（7/6）Notion記録＋My Database（How Ren Thinks/Idea Box）2件追記",
