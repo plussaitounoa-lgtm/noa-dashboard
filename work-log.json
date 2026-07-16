@@ -3,6 +3,17 @@
     {
       "date": "2026-07-16",
       "completed": [
+        "CEOセッション: PU改修優先度の会話ベース確認（包茎PLUS houhien/tohaは技術/LP不良疑い・GLP-1はPVFR/IMPFR比からPU表示率を逆算し追加率+表示率の複合問題と特定）",
+        "朝会ログ(7/16)をNotion Meeting Log DBに記録＋My Database3件追記（Team Playbook/Marketing Basics/Idea Box、Idea Box分はNoa指摘で追加修正）",
+        "タスクボード反映: t183 in_progress化、t184(コスメバナー作成)/t185(コスメPU改修)新規登録、t140に工藤さんFBすり合わせ内容（診断構成確定・価格訴求中心・オプション表現簡略化・FAQ/口コミ方針・広告感懸念への対応）を記録"
+      ],
+      "challenge": "Notion MCPトークンが会話途中で失効し、t140のFB内容をNotionに記録できないまま持ち越し。My Database追記も1回目でIdea Boxを見落とし、Noaの指摘で気付いた。",
+      "learning": "claude.aiのNotionコネクタ(mcp__claude_ai_Notion__*)は「MCP経由のNotionは繋がらない」という過去の教訓とは別物で普通に使える。My Database追記は判断軸系(Team Playbook/Marketing Basics)だけでなく未実行アイデア(Idea Box)も含めて全カテゴリをチェックリスト的に回す。knowledge/anti-patterns.mdに昇格済み。",
+      "next": "Notion再認証後にt140のFB内容をMeeting Log DBへ記録。t184/t185は対象記事・診断が未確定のまま登録したので着手時にnote追記。GLP-1追加率が通常PU/WINUT混在で見かけ低下してる可能性をCIOに検証させる"
+    },
+    {
+      "date": "2026-07-16",
+      "completed": [
         "カロリー診断×SLILIN F 結果カル全面改修（t183）: Card2を「ジャンクvsバランス、同じカロリー対比」に刷新、Card3を新軸と接続、Card4/5を新規追加（一般的対策の壁→サプリという一般カテゴリへの橋渡し）し、4枚→6枚構成に拡張",
         "モックアップArtifact作成（結果カル全6枚、現行/新案トグル・タイプA〜Dタブ切り替え可）でNoaとの視覚レビューを実施"
       ],
