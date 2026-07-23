@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "date": "2026-07-17",
+      "completed": [
+        "カロリー診断×SLILIN F（t183）Card4・5を既存の別診断向け実イラスト済みアセットに流用、v18→v19（Card4困りごとをA/B・C/Dでタイプ別分岐）まで完成",
+        "noa-docsの既存ページ(brief-calorie-slilinf-2026-07-16.html、別セッションがv12時点で作成済み)をv19まで全面更新してpush・公開確認"
+      ],
+      "challenge": "既存アセット流用時、C・D(既に運動習慣あり)向けの困りごと文言が「運動が大変」のままだと的外れとNoa指摘。Artifactが予期せず削除され閲覧不可になり、docsへの切り替えが必要になった。",
+      "learning": "既存アセット流用時は全体の温度感だけでなく下位セグメントごとの整合性も確認する。Artifactのpublishエラー時はlistで確認し別ファイルパスで再publish。Artifact不可時はnoa-docsが代替、新規作成前に既存ページの有無を確認する。knowledge/genre-insights.mdに昇格済み。",
+      "next": "Noaの最終GO待ち。GOが出ればデザイン依頼書化して啓音さんへ構築依頼"
+    },
+    {
       "date": "2026-07-22",
       "completed": [
         "7/22朝会ログをNotion Meeting Log DBに記録(原文サマリー＋行間読み取り版を要約せず構造化、206ブロック)。My Database2件追記(Team Playbook: ケイトさん分業ルール／Marketing Basics: 準CV記事PVFR・CVR主要指標化)",
