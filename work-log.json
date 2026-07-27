@@ -1,6 +1,18 @@
 {
   "entries": [
     {
+      "date": "2026-07-27",
+      "completed": [
+        "カロリー診断×SLILIN F（t183）完了。結果カルーセルv20〜v25で最終調整し5枚構成で確定",
+        "正式デザイン依頼書(data/output/briefs/デザイン依頼書-カロリー診断-SLILINF.md)作成",
+        "啓音さん連携用HTML(noa-docs/brief-calorie-slilinf-line-impl-2026-07-27.html)を既存テンプレに倣って新規作成",
+        "Noaが啓音さんへデザイン依頼送付済み。t183をdone化"
+      ],
+      "challenge": "「デザイナー用の依頼」がmdファイルでは渡せないと指摘され、Notion依頼テンプレを検索したが見つからず。過去のnoa-docs内「line-impl」HTMLページ（隠れ肥満タイプ診断の啓音さん連携用）を発見し同形式で代替作成した。",
+      "learning": "啓音さんへの実装連携は noa-docs/brief-{診断名}-line-impl-{日付}.html という確立されたテンプレ形式で行う（Notionではない）。knowledge/playbooks.mdに昇格済み。",
+      "next": "t183完了。デザイナー側の実装待ち"
+    },
+    {
       "date": "2026-07-23",
       "completed": [
         "7/23朝会ログをNotion Meeting Log DBに記録（原文サマリー＋行間読み取り版、85ブロック）。朝会ログ棚卸しで登録漏れ2件を発見・登録: t198（デザイン作成ツールのアップデート・改修）、t199（リッチメニュー設置）。Notionプロジェクト「デザイン制作フロー改善（内製化）」新規作成しt198・t186を紐付け。Team Playbookに「バナー・ポップ分担ルール」追記",
